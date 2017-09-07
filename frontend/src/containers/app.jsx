@@ -18,9 +18,15 @@ import Budget from './budget';
 
 import Header from './header';
 
+import Login from './login';
+import SignUp from './sign_up';
+
 const App = () => (
   <div>
     <Header />
+    <Route path="/login" component={Login} />
+    <Route path="/signup" component={SignUp} />
+
     <Route path="/accounts" component={Accounts} />
     <Route path="/transaction/:id" component={Transaction} />
     <Route path="/transactions" component={Transactions} />
@@ -28,7 +34,7 @@ const App = () => (
     <Route path="/groupings" component={Groupings} />
     <Route path="/grouping/:id" component={Grouping} />
     <Route path="/budget/:id" component={Budget} />
-    <Redirect to="/transactions" />
+    <Redirect to="/signup" />
   </div>
 );
 

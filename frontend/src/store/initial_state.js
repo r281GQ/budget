@@ -1,7 +1,10 @@
-import {fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 
 export default fromJS({
   account: {
     data: {}
+  },
+  auth: {
+    isAuthenticated: false
   }
-})
+});

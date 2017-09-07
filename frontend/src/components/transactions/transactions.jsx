@@ -23,9 +23,8 @@ const Transactions = () => (
                   <Label>IMAX</Label>
                   <Label as="a">Exciting</Label>
                   <Label icon="globe" content="Additional Languages" />
-                  <Button primary floated="right">
-                    Buy tickets
-                    <Icon name="right chevron" />
+                  <Button color="red" floated="right">
+                    Delete
                   </Button>
                 </Item.Extra>
               </Item.Content>

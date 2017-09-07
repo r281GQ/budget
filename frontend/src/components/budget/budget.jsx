@@ -20,7 +20,7 @@ const Budget = () => (
     <Container text>
       <Segment>
         <Header block as="h2" icon="checked calendar" content="Budget" />
-        <Form>
+        <Form >
           <Field name="name" label="Name" component={Form.Input} />
           <Form.Group widths="equal">
             <Field

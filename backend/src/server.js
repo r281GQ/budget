@@ -27,6 +27,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./models/user')(mongoose);
+require('./models/account')(mongoose);
 
 require('./services/mongoose');
 require('./services/passport');

@@ -34,16 +34,55 @@ module.exports = mongoose => {
   });
 
   userSchema.pre('save', function(next) {
-    if(!this.googleAuthId)
-      this.isNew || isModified('password')
-        ? bcrypt.hash(this.password, 10, (err, hash) => {
+    const user = this;
+
+    if (!user.googleAuthId)
+      user.isNew || user.isModified('password')
+        ? bcrypt.hash(user.password, 10, (err, hash) => {
             if (err) next(err);
-            this.password = hash;
+            user.password = hash;
             next();
           })
         : next();
-    next();
+    else next();
   });
+
+  userSchema.pre('remove', function(next){
+    const Transaction = mongoose.model('Transaction');
+    Transaction.remove({user: {$in: this}})
+      .then(() => next())
+      .catch((err) => {next(err);});
+  });
+
+  userSchema.pre('remove', function(next){
+    const Budget = mongoose.model('Budget');
+    Budget.remove({user: {$in: this}})
+      .then(() => next())
+      .catch((err) => {next(err);});
+  });
+
+  userSchema.pre('remove', function(next){
+    const Account = mongoose.model('Account');
+    Account.remove({user: {$in: this}})
+      .then(() => next())
+      .catch((err) => {next(err);});
+  });
+
+
+  userSchema.pre('remove', function(next){
+    const Grouping = mongoose.model('Grouping');
+    Grouping.remove({user: {$in: this}})
+      .then(() => next())
+      .catch((err) => {next(err);});
+  });
+
+  userSchema.pre('remove', function(next){
+    const Equity = mongoose.model('Equity');
+    Equity.remove({user: {$in: this}})
+      .then(() => next())
+      .catch((err) => {next(err);});
+  });
+
 
   mongoose.model('User', userSchema);
 };
