@@ -1,4 +1,4 @@
-const {handleSignUp} = require('./../services/auth');
+const { handleSignUp } = require('./../services/auth');
 
 module.exports = app => passport => {
   app.get('/api/auth/whoami', (request, response) => {
@@ -16,9 +16,9 @@ module.exports = app => passport => {
   );
 
   app.get('/api/auth/logout', (request, response) => {
-    request.logout();
-    request.session = null;
-    return response.status(200).send({ messgae: 'Successfully logged out!' });
+    request.session.destroy(function(err) {
+      return response.status(200).send({ messgae: 'Successfully logged out!' });
+    });
   });
 
   const signUpMiddleWare = (request, response, next) => {

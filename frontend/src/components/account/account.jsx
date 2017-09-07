@@ -15,12 +15,18 @@ let i = [
   }
 ];
 
-const Account = () => (
+const Account = ({ handleSubmit, createAccount }) => (
   <Padded>
     <Container text>
       <Segment>
         <Header block as="h2" icon="currency" content="Account" />
-        <Form>
+        <Form
+          onSubmit={handleSubmit(formProps =>
+            createAccount({ name: formProps.get('name')
+          , initialBalance: formProps.get('initialBalance'), currency: formProps.get('currency')
+         })
+          )}
+        >
           <Field name="name" label="Name" component={Form.Input} />
           <Form.Group widths="equal">
             <Field
@@ -36,8 +42,8 @@ const Account = () => (
               options={[
                 {
                   key: 1,
-                  text: 'dsdfsd',
-                  value: 'male'
+                  text: 'GBP',
+                  value: 'GBP'
                 }
               ]}
             />
@@ -55,6 +61,6 @@ const Account = () => (
   </Padded>
 );
 
-Account.propTypes = {};
+Account.propTypes = {createAccount: PropTypes.func};
 
 export default Account;

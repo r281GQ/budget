@@ -7,6 +7,9 @@ const reducer = (state = initialState.get('account'), {type, payload}) => {
     case account.WRITE_ACCOUNTS:
 
       return state.set('data', fromJS(payload))
+      case account.WRITE_ACCOUNT:
+
+        return state.update('data', value => value.set(payload._id, fromJS(payload)))
     default:
       return state;
   }

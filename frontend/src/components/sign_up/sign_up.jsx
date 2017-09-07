@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import styled from 'styled-components';
-
+import { Field } from 'redux-form/immutable';
 import {
   Form,
   Container,
@@ -11,7 +10,6 @@ import {
   Button,
   Grid
 } from 'semantic-ui-react';
-import { Field } from 'redux-form/immutable';
 
 const Padded = styled.div`padding: 1em;`;
 

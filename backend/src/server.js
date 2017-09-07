@@ -29,11 +29,15 @@ app.use(passport.session());
 require('./models/user')(mongoose);
 require('./models/account')(mongoose);
 require('./models/budget')(mongoose);
+require('./models/grouping')(mongoose);
+require('./models/transaction')(mongoose);
+require('./models/equity')(mongoose);
 
 require('./services/mongoose');
 require('./services/passport');
 
 require('./routes/auth')(app)(passport);
+require('./routes/account')(app);
 require('./routes/static')(app)(express);
 
 app.listen(PORT, () =>
