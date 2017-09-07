@@ -28,6 +28,7 @@ app.use(passport.session());
 
 require('./models/user')(mongoose);
 require('./models/account')(mongoose);
+require('./models/budget')(mongoose);
 
 require('./services/mongoose');
 require('./services/passport');
