@@ -40,6 +40,12 @@ const config = {
         test: /\.scss$/
       },
       {
+        use: extract.extract({
+          use: ['css-loader']
+        }),
+        test: /\.css$/
+      },
+      {
         test: /\.(png|woff|woff2|eot|ttf|svg|jpg)$/,
         loader: 'url-loader?limit=10000'
       },

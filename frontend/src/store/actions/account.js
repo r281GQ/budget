@@ -1,0 +1,2 @@
+export const DELETE_ACCOUNT = 'WRITE_ACCOUNT';
+export const WRITE_ACCOUNTS = 'WRITE_ACCOUNTS';
