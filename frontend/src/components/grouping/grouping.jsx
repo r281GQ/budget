@@ -5,6 +5,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import styled from 'styled-components';
 import { Container, Form, Segment, Header, Button } from 'semantic-ui-react';
 
+import DF from './custom_drop_down'
+
 const Padded = styled.div`padding: 1em;`;
 
 let i = [
@@ -15,22 +17,31 @@ let i = [
   }
 ];
 
-const Grouping = () => (
+const Grouping = ({handleSubmit, createGrouping}) => (
   <Padded>
     <Container text>
       <Segment>
         <Header block as="h2" icon="id card" content="Grouping" />
-        <Form>
+        <Form onSubmit = {handleSubmit(formProps => {
+          console.log(formProps.toJS());
+          createGrouping({name: formProps.get('name'), type: formProps.get('type') })
+        })}>
           <Field name="name" label="Name" component={Form.Input} />
+
             <Field
-              name="currency"
-              label="Currency"
-              component={Form.Select}
+              name="type"
+              label="Type"
+              component={DF}
               options={[
                 {
                   key: 1,
-                  text: 'dsdfsd',
-                  value: 'male'
+                  text: 'income',
+                  value: 'income'
+                },
+                {
+                  key: 2,
+                  text: 'expense',
+                  value: 'expense'
                 }
               ]}
             />
@@ -47,6 +58,6 @@ const Grouping = () => (
   </Padded>
 );
 
-Grouping.propTypes = {};
+Grouping.propTypes = {createGrouping: PropTypes.func};
 
 export default Grouping;

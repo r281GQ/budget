@@ -20,21 +20,25 @@ const pickPropertiesForGrouping = grouping =>
   _.pick(grouping, ['_id', 'name', 'type']);
 
 const handlePostGrouping = (request, response) => {
-  const { name, type } = request.body;
+  return new Promise((resolve, reject) => {
+    const { name, type } = request.body;
 
-  const grouping = new Grouping({
-    name,
-    type
+    const grouping = new Grouping({
+      name,
+      type
+    });
+
+    grouping.user = extractUser(request);
+
+    grouping
+      .save()
+      .then(grouping => {
+        resolve(pickPropertiesForGrouping(grouping));
+      })
+      .catch(error => {
+        console.log(error);
+        reject(error)});
   });
-
-  grouping.user = extractUser(request);
-
-  grouping
-    .save()
-    .then(grouping => {
-      resolve(pickPropertiesForGrouping(grouping));
-    })
-    .catch(error => reject({ error: SERVER_ERROR }));
 };
 
 const handleGetAllGroupings = (request, response) => {

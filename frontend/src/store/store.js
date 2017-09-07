@@ -7,9 +7,10 @@ import thunk from 'redux-thunk';
 
 import account from './reducers/account';
 import auth from './reducers/auth';
+import grouping from './reducers/grouping';
 
 const store = createStore(
-  combineReducers({ account, auth, routing, form }),
+  combineReducers({ account, auth, grouping, routing, form }),
   composeWithDevTools(applyMiddleware(thunk, routerMiddlewareInstance))
 );
 

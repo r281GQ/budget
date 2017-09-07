@@ -34,7 +34,7 @@ const App = () => (
     <Route path="/groupings" component={Groupings} />
     <Route path="/grouping/:id" component={Grouping} />
     <Route path="/budget/:id" component={Budget} />
-    <Redirect to="/signup" />
+    <Redirect to="/login" />
   </div>
 );
 

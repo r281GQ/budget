@@ -38,6 +38,7 @@ require('./services/passport');
 
 require('./routes/auth')(app)(passport);
 require('./routes/account')(app);
+require('./routes/grouping')(app);
 require('./routes/static')(app)(express);
 
 app.listen(PORT, () =>

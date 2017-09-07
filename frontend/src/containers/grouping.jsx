@@ -5,11 +5,12 @@ import { reduxForm } from 'redux-form/immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import styled from 'styled-components';
 import Grouping from './../components/grouping/grouping';
+import { createGrouping } from './../store/action_creators/grouping';
 
-const GroupingContainer = () => <Grouping />;
+const GroupingContainer = props => <Grouping {...props} />;
 
 GroupingContainer.propTypes = {
 
 };
 
-export default connect()(reduxForm({ form: 'grouping' })(GroupingContainer));
+export default connect(null, {createGrouping})(reduxForm({ form: 'grouping' })(GroupingContainer));
