@@ -1,6 +1,5 @@
 import request from './../../../../services/request';
 import * as accounts from './../actions/account';
-import { whoAmI } from './who_am_i';
 
 // export const logOut = () => dispatch =>
 //   request
@@ -13,13 +12,17 @@ import { whoAmI } from './who_am_i';
 export const createAccount = account => dispatch => {
   request
     .post('/api/account', account)
-    .then(({data}) => {
-      dispatch({type: accounts.WRITE_ACCOUNT, payload: data});
+    .then(({ data }) => {
+      dispatch({ type: accounts.WRITE_ACCOUNT, payload: data });
     })
     .catch(error => console.log(error));
 };
-export const signUp = userInfo => dispatch =>
+
+export const getAccounts = () => dispatch => {
   request
-    .post('/api/auth/local/signup', userInfo)
-    .then(() => dispatch(whoAmI()))
+    .get('/api/account')
+    .then(({ data }) => {
+      dispatch({ type: accounts.WRITE_ACCOUNTS, payload: data });
+    })
     .catch(error => console.log(error));
+};

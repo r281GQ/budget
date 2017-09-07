@@ -4,27 +4,27 @@ module.exports = app => {
   const authMiddleWare = require('./../services/auth_middleware');
 
   const {
-    handleGetAllAccounts,
-    handleDeleteAccount,
-    handlePostAccount,
-    handlePutAccount
-  } = require('./../services/account');
+    handleGetAllGroupings,
+    handleDeleteGrouping,
+    handleGetGrouping,
+    handlePostGrouping,
+    handlePutAGrouping
+  } = require('./../services/grouping');
 
   // router.get(`/${ACCOUNT_BASE_URL}`, handleGetAllAccounts);
   //
 
   router.use(authMiddleWare);
 
-  app.use(router);
 
-  router.post(`/api/account`, (request, response) => {
-    handlePostAccount(request)
+  router.post(`/api/grouping`, (request, response) => {
+    handlePostGrouping(request)
       .then(account => response.status(201).send(account))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
   });
 
-  router.put(`/api/account/:id`, (request, response) => {
-    handlePutAccount(request)
+  router.put(`/api/grouping/:id`, (request, response) => {
+    handlePutGrouping(request)
       .then(account => response.status(200).send(account))
       .catch(error => {
         switch (error.message) {
@@ -40,14 +40,14 @@ module.exports = app => {
       });
   });
 
-  router.get(`/api/account`, (request, response) => {
-    handleGetAllAccounts(request)
+  router.get(`/api/grouping`, (request, response) => {
+    handleGetAllGroupings(request)
       .then(account => response.status(200).send(account))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
   });
 
-  router.delete(`/api/account/:id`, (request, response) => {
-    handleDeleteAccount(request)
+  router.delete(`/api/grouping/:id`, (request, response) => {
+    handleDeleteGrouping(request)
       .then(() => response.status(200).send({}))
       .catch(error => {
         switch (error.message) {
@@ -64,4 +64,5 @@ module.exports = app => {
   // router.put(`/${ACCOUNT_BASE_URL}`, handlePutAccount);
   // router.delete(`/${ACCOUNT_BASE_URL}/:id`, handleDeleteAccount);
   // router.get(`/${ACCOUNT_BASE_URL}/:id`, handleGetAccount);
+  app.use(router);
 };
