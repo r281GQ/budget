@@ -15,73 +15,90 @@ const StyledMenu = styled(Menu)`
 
 const Header = ({ linkName, linkType }) => (
   <div>
-  <StyledMenu borderless size="massive" stackable>
-    <Menu.Menu position="left">
-      {linkType === 'create' ? <Menu.Item
-        as={Link}
-        to={`/${linkName}/0`}
-        content="create"
-        icon="plus circle"
-      /> :
-      <Menu.Item
-        as={Link}
-        to={`/${linkName}`}
-        content="list items"
-        icon="browser"
-      />}
-      <Menu.Item
-        as={Link}
-        to="/transactions"
-        content="Transactions"
-        icon="usd"
-      />
-      <Menu.Item as={Link} to="/accounts" content="Accounts" icon="currency" />
-      <Menu.Item
-        as={Link}
-        to="/groupings"
-        content="Groupings"
-        icon="id card"
-      />
-      <Menu.Item as={Link} to="/budgets" content="Budgets" icon="checked calendar" />
-
-    </Menu.Menu>
-    <Menu.Menu position="right">
-      <Menu.Item content="Endre" />
-      <Menu.Item content="LogOut" icon="log out" />
-    </Menu.Menu>
-  </StyledMenu>
-  <StyledMenu><Menu.Menu> <Menu.Item>
-      <Dropdown
-        placeholder="Filter account"
-        selection
-        options={[{ text: 'sdf', key: 1 , value: 3 }]}
-      />
-    </Menu.Item>
-    <Menu.Item>
-      <Dropdown
-        placeholder="Filter date"
-        selection
-        options={[{ text: 'sdf', key: 1 }]}
-      />
-    </Menu.Item>
-    <Menu.Item>
-      <Dropdown
-        placeholder="Filter grouping"
-        selection
-        options={[{ text: 'sdf', key: 1 }]}
-      />
-    </Menu.Item>
-
-    <Menu.Item>
-      <Search fluid/>
-    </Menu.Item>
-    <Menu.Item>
-      <Dropdown
-        placeholder="Filter budget"
-        selection
-        options={[{ text: 'sdf', key: 1 }]}
-      />
-    </Menu.Item></Menu.Menu></StyledMenu></div>
+    <StyledMenu borderless size="massive" stackable>
+      <Menu.Menu position="left">
+        {linkType === 'create' ? (
+          <Menu.Item
+            as={Link}
+            to={`/${linkName}/0`}
+            content="create"
+            icon="plus circle"
+          />
+        ) : (
+          <Menu.Item
+            as={Link}
+            to={`/${linkName}`}
+            content="list items"
+            icon="browser"
+          />
+        )}
+        <Menu.Item
+          as={Link}
+          to="/transactions"
+          content="Transactions"
+          icon="usd"
+        />
+        <Menu.Item
+          as={Link}
+          to="/accounts"
+          content="Accounts"
+          icon="currency"
+        />
+        <Menu.Item
+          as={Link}
+          to="/groupings"
+          content="Groupings"
+          icon="id card"
+        />
+        <Menu.Item
+          as={Link}
+          to="/budgets"
+          content="Budgets"
+          icon="checked calendar"
+        />
+      </Menu.Menu>
+      <Menu.Menu position="right">
+        <Menu.Item content="Endre" />
+        <Menu.Item content="LogOut" icon="log out" />
+      </Menu.Menu>
+    </StyledMenu>
+    <StyledMenu>
+      <Menu.Menu>
+        {' '}
+        <Menu.Item>
+          <Dropdown
+            placeholder="Filter account"
+            selection
+            options={[{ text: 'sdf', key: 1, value: 3 }]}
+          />
+        </Menu.Item>
+        <Menu.Item>
+          <Dropdown
+            placeholder="Filter date"
+            selection
+            options={[{ text: 'sdf', key: 1 }]}
+          />
+        </Menu.Item>
+        <Menu.Item>
+          <Dropdown
+            placeholder="Filter grouping"
+            selection
+            options={[{ text: 'sdf', key: 1 }]}
+          />
+        </Menu.Item>
+        <Menu.Item>
+          <Search fluid />
+        </Menu.Item>
+        <Menu.Item>
+          <Dropdown
+            placeholder="Filter budget"
+            selection
+            options={[{ text: 'sdf', key: 1 }]}
+          />
+        </Menu.Item>
+      </Menu.Menu>
+    </StyledMenu>
+  </div>
 );
 
 Header.propTypes = {

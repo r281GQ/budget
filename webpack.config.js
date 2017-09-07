@@ -19,7 +19,7 @@ const config = {
     historyApiFallback: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:3050'
+        target: 'http://localhost:3000'
       }
     }
   },
