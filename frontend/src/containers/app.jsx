@@ -23,6 +23,8 @@ import SignUp from './sign_up';
 import { getAccounts } from './../store/action_creators/account';
 import { getGroupings } from './../store/action_creators/grouping';
 
+import withTypeContainer from './model_container';
+
 class App extends React.PureComponent {
   componentDidMount() {
     this.props.getAccounts();
@@ -36,11 +38,11 @@ class App extends React.PureComponent {
         <Route path="/login" component={Login} />
         <Route path="/signup" component={SignUp} />
 
-        <Route path="/accounts" component={Accounts} />
+        <Route path="/accounts" component={withTypeContainer('account')} />
         <Route path="/transaction/:id" component={Transaction} />
         <Route path="/transactions" component={Transactions} />
         <Route path="/account/:id" component={Account} />
-        <Route path="/groupings" component={Groupings} />
+        <Route path="/groupings" component={withTypeContainer('grouping')} />
         <Route path="/grouping/:id" component={Grouping} />
         <Route path="/budget/:id" component={Budget} />
         <Redirect to="/login" />

@@ -26,3 +26,20 @@ export const getGroupings = () => dispatch => {
     })
     .catch(error => console.log(error));
 };
+export const updateGrouping = account => dispatch => {
+  request
+    .put('/api/grouping', account)
+    .then(({ data }) => {
+      dispatch({ type: groupings.WRITE_GROUPING, payload: data });
+    })
+    .catch(error => console.log(error));
+};
+
+export const deleteGrouping = _id => dispatch => {
+  request
+    .delete(`/api/grouping/${_id}`)
+    .then(({ data }) => {
+      dispatch({ type: groupings.DELETE_GROUPING, payload: _id });
+    })
+    .catch(error => console.log(error));
+};

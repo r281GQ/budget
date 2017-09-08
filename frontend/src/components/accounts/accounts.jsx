@@ -12,8 +12,7 @@ const Accounts = ({ accounts, accountDeleteHandler }) => (
         deleteHandler={accountDeleteHandler(account._id)}
         name={account.name}
         _id={account._id}
-        initialBalance={account.initialBalance}
-        currentBalance={account.currentBalance}
+        description = {[{name: 'Initial Balance' , value: account.initialBalance}, {name: 'Current balance', value: account.currentBalance}]}
       />
     ))}
   </PaddedModelContainer>
