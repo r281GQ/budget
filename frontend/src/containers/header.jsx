@@ -2,14 +2,14 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import styled from 'styled-components';
 import getLinkNames from './../store/selectors/link_name_selector';
 import {withRouter} from 'react-router';
+
+import {logOut} from './../store/action_creators/auth'
 
 import Header from './../components/header/header';
 
 const HeaderContainer = props => {
-  console.log(props);
   return <Header {...props} />}
 
 HeaderContainer.propTypes = {
@@ -24,4 +24,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default withRouter(connect(mapStateToProps) (HeaderContainer));
+export default withRouter(connect(mapStateToProps, {logOut}) (HeaderContainer));

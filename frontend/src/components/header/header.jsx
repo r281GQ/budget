@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Menu, Dropdown, Search } from 'semantic-ui-react';
@@ -13,7 +12,7 @@ const StyledMenu = styled(Menu)`
   }
 `;
 
-const Header = ({ linkName, linkType }) => (
+const Header = ({ linkName, linkType, logOut }) => (
   <div>
     <StyledMenu borderless size="massive" stackable>
       <Menu.Menu position="left">
@@ -59,7 +58,7 @@ const Header = ({ linkName, linkType }) => (
       </Menu.Menu>
       <Menu.Menu position="right">
         <Menu.Item content="Endre" />
-        <Menu.Item content="LogOut" icon="log out" />
+        <Menu.Item content="LogOut" icon="log out" onClick = {logOut}/>
       </Menu.Menu>
     </StyledMenu>
     <StyledMenu>
@@ -103,7 +102,8 @@ const Header = ({ linkName, linkType }) => (
 
 Header.propTypes = {
   linkName: PropTypes.string,
-  linkType: PropTypes.string
+  linkType: PropTypes.string,
+  logOut: PropTypes.any
 };
 
 export default Header;

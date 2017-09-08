@@ -114,23 +114,26 @@ const handlePostAccount = request =>
 
 
 const handleDeleteAccount = (request, response) => {
-  const user = extractUser(request);
-  const _id = request.params['id'];
+  return new Promise ((resolve, reject) => {
+    const user = extractUser(request);
+    const _id = request.params._id
 
-  if (!idValidator(_id))
-    return reject({ message: ID_INVALID_OR_NOT_PRESENT });
+    if (!idValidator(_id))
+      return reject({ message: ID_INVALID_OR_NOT_PRESENT });
 
-  Account.findOne({ _id, user })
-    .then(account => {
-      if (!account) return Promise.reject({ message: RESOURCE_NOT_FOUND });
-      return account.remove();
-    })
-    .then(() => {
-      return resolve.send({});
-    })
-    .catch(error => {
-      return reject(error)
-    });
+    Account.findOne({ _id, user })
+      .then(account => {
+        if (!account) return Promise.reject({ message: RESOURCE_NOT_FOUND });
+        return account.remove();
+      })
+      .then(() => {
+        return resolve({});
+      })
+      .catch(error => {
+        console.log(error);
+        return reject(error)
+      });
+  })
 };
 
 module.exports = {

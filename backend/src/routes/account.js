@@ -31,7 +31,7 @@ module.exports = app => {
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
   });
 
-  router.put(`/api/account/:id`, (request, response) => {
+  router.put(`/api/account`, (request, response) => {
     handlePutAccount(request)
       .then(account => response.status(200).send(account))
       .catch(error => {
@@ -54,7 +54,7 @@ module.exports = app => {
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
   });
 
-  router.delete(`/api/account/:id`, (request, response) => {
+  router.delete(`/api/account/:_id`, (request, response) => {
     handleDeleteAccount(request)
       .then(() => response.status(200).send({}))
       .catch(error => {

@@ -24,16 +24,15 @@ module.exports = app => {
 
   router.use(authMiddleWare);
 
-
   router.post(`/api/grouping`, (request, response) => {
     handlePostGrouping(request)
-      .then(account => response.status(201).send(account))
+      .then(grouping => response.status(201).send(grouping))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
   });
 
   router.put(`/api/grouping/:id`, (request, response) => {
     handlePutGrouping(request)
-      .then(account => response.status(200).send(account))
+      .then(grouping => response.status(200).send(grouping))
       .catch(error => {
         switch (error.message) {
           case RESOURCE_NOT_FOUND:
@@ -50,7 +49,7 @@ module.exports = app => {
 
   router.get(`/api/grouping`, (request, response) => {
     handleGetAllGroupings(request)
-      .then(account => response.status(200).send(account))
+      .then(grouping => response.status(200).send(grouping))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
   });
 
@@ -59,10 +58,14 @@ module.exports = app => {
       .then(() => response.status(200).send({}))
       .catch(error => {
         switch (error.message) {
+          case ACCOUNT_BALANCE:
+            return response.status(400).send({ error: ACCOUNT_BALANCE });
           case RESOURCE_NOT_FOUND:
             return response.status(404).send({ error: RESOURCE_NOT_FOUND });
-            case ID_INVALID_OR_NOT_PRESENT:
-          return   response.status(409).send({ error: ID_INVALID_OR_NOT_PRESENT })
+          case ID_INVALID_OR_NOT_PRESENT:
+            return response
+              .status(409)
+              .send({ error: ID_INVALID_OR_NOT_PRESENT });
           default:
             return response.status(500).send({ error: SERVER_ERROR });
         }

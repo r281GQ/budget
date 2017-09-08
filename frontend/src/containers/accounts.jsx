@@ -1,15 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-// import { reduxForm } from 'redux-form/immutable';
-import { getAccounts } from './../store/action_creators/account';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import styled from 'styled-components';
+import { connect } from 'react-redux';
 
-const Accounts = ({getAccounts}) => <div onClick = {getAccounts}>accounts</div>
+import { deleteAccount } from './../store/action_creators/account';
+import Accounts from './../components/accounts/accounts';
 
-Accounts.propTypes = {
-getAccounts: PropTypes.func
+class AccountsContainer extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this._handleDeleteAccount = this._handleDeleteAccount.bind(this);
+  }
+
+  _handleDeleteAccount(_id) {
+    return () => this.props.deleteAccount(_id);
+  }
+
+  render() {
+    return (
+      <Accounts
+        accountDeleteHandler={this._handleDeleteAccount}
+        accounts={this.props.accounts.toList().toJS()}
+      />
+    );
+  }
+}
+
+AccountsContainer.propTypes = {
+  accounts: ImmutablePropTypes.map,
+  deleteAccount: PropTypes.func
 };
 
-export default connect(null, {getAccounts}) (Accounts);
+const mapStateToProps = state => {
+  return {
+    accounts: state.getIn(['account', 'data'])
+  };
+};
+
+export default connect(mapStateToProps, { deleteAccount })(AccountsContainer);

@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import styled from 'styled-components';
 import { Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Accounts from './accounts';
 import Account from './account';
@@ -21,24 +20,41 @@ import Header from './header';
 import Login from './login';
 import SignUp from './sign_up';
 
-const App = () => (
-  <div>
-    <Header />
-    <Route path="/login" component={Login} />
-    <Route path="/signup" component={SignUp} />
+import { getAccounts } from './../store/action_creators/account';
+import { getGroupings } from './../store/action_creators/grouping';
 
-    <Route path="/accounts" component={Accounts} />
-    <Route path="/transaction/:id" component={Transaction} />
-    <Route path="/transactions" component={Transactions} />
-    <Route path="/account/:id" component={Account} />
-    <Route path="/groupings" component={Groupings} />
-    <Route path="/grouping/:id" component={Grouping} />
-    <Route path="/budget/:id" component={Budget} />
-    <Redirect to="/login" />
-  </div>
-);
+class App extends React.PureComponent {
+  componentDidMount() {
+    this.props.getAccounts();
+    this.props.getGroupings();
+  }
 
-{/* <Route path="/budgets" component={Groupings} /> */}
-App.propTypes = {};
+  render() {
+    return (
+      <div>
+        <Header />
+        <Route path="/login" component={Login} />
+        <Route path="/signup" component={SignUp} />
 
-export default App;
+        <Route path="/accounts" component={Accounts} />
+        <Route path="/transaction/:id" component={Transaction} />
+        <Route path="/transactions" component={Transactions} />
+        <Route path="/account/:id" component={Account} />
+        <Route path="/groupings" component={Groupings} />
+        <Route path="/grouping/:id" component={Grouping} />
+        <Route path="/budget/:id" component={Budget} />
+        <Redirect to="/login" />
+      </div>
+    );
+  }
+}
+
+{
+  /* <Route path="/budgets" component={Groupings} /> */
+}
+App.propTypes = {
+  getAccounts: PropTypes.func,
+  getGroupings: PropTypes.func
+};
+
+export default connect(null, { getAccounts, getGroupings })(App);
