@@ -2,18 +2,30 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form/immutable';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import styled from 'styled-components';
+import { Redirect } from 'react-router-dom';
 
-import {logIn} from './../store/action_creators/auth'
+import { logIn } from './../store/action_creators/auth';
 
-import Login from './../components/login/login'
+import Login from './../components/login/login';
 
-const LoginContainer = props => <div><Login handleSubmit = {props.handleSubmit} logIn = {props.logIn}/></div>
+const LoginContainer = props =>
+  props.isAuthenticated ? (
+    <Redirect to="/transactions" />
+  ) : (
+    <Login handleSubmit={props.handleSubmit} logIn={props.logIn} />
+  );
 
 LoginContainer.propTypes = {
-logIn: PropTypes.func
+  logIn: PropTypes.func,
+  isAuthenticated: PropTypes.bool
 };
 
-// export default LoginContainer;
-export default connect(null, {logIn})(reduxForm({ form: 'login' })(LoginContainer));
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.getIn(['auth', 'isAuthenticated'])
+  };
+};
+
+export default connect(mapStateToProps, { logIn })(
+  reduxForm({ form: 'login' })(LoginContainer)
+);

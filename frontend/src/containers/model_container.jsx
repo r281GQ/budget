@@ -8,6 +8,8 @@ import { deleteGrouping } from './../store/action_creators/grouping';
 import Accounts from './../components/accounts/accounts';
 import Groupings from './../components/groupings/groupings';
 
+import withAuth from './with_auth';
+
 const handlers = {
   account: deleteAccount,
   grouping: deleteGrouping
@@ -35,29 +37,6 @@ const withUI = type => props => {
       );
   }
 };
-
-//
-// /*eslint react/display-name: off*/
-// const withUI = (type, _handleDelete, collection) => props => {
-//   switch (type) {
-//     case 'account':
-//       return (
-//         <Accounts
-//           {...props}
-//           accountDeleteHandler={_handleDelete}
-//           accounts={collection.toList().toJS()}
-//         />
-//       );
-//     case 'grouping':
-//       return (
-//         <Groupings
-//           {...props}
-//           groupingDeleteHandler={_handleDelete}
-//           groupings={collection.toList().toJS()}
-//         />
-//       );
-//   }
-// };
 
 export default type => {
   const deleteModel = handlers[type];
@@ -95,5 +74,5 @@ export default type => {
     };
   };
 
-  return connect(mapStateToProps, { deleteModel })(Container);
+  return withAuth(connect(mapStateToProps, { deleteModel })(Container));
 };

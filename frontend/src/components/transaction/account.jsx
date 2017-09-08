@@ -4,23 +4,23 @@ import { Field } from 'redux-form/immutable';
 
 import ReduxFormCompatibleDropDown from './../form_elements/redux_form_compatible_drop_down';
 
-const Equtiy = ({ equities }) => (
+const Account = ({ accounts }) => (
   <Field
-    name="equity"
-    label="Equtiy"
+    name="account"
+    label="Account"
     component={ReduxFormCompatibleDropDown}
-    options={equities}
+    options={accounts}
   />
 );
 
-Equtiy.propTypes = {
-  equities: PropTypes.arrayOf(
+Account.propTypes = {
+  accounts: PropTypes.arrayOf(
     PropTypes.shape({
-    key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       text: PropTypes.string,
       value: PropTypes.string
     })
   )
 };
 
-export default Equtiy;
+export default Account;

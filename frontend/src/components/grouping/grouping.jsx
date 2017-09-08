@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form/immutable';
 import { Form } from 'semantic-ui-react';
 
-import ReduxFormCompatibleDropDown from './../redux_form_compatible_drop_down';
+import Currency from './../form_elements/currency';
 import ModelForm from './../model_form';
 
 const Grouping = ({ handleSubmit, createGrouping }) => (
@@ -19,11 +19,8 @@ const Grouping = ({ handleSubmit, createGrouping }) => (
   >
     <Field name="name" label="Name" component={Form.Input} />
 
-    <Field
-      name="type"
-      label="Type"
-      component={ReduxFormCompatibleDropDown}
-      options={[
+    <Currency
+      currencies={[
         {
           key: 1,
           text: 'Income',

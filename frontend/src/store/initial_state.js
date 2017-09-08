@@ -7,6 +7,12 @@ export default fromJS({
   grouping: {
     data: {}
   },
+  budget: {
+    data: {}
+  },
+  transaction: {
+    data: {}
+  },
   auth: {
     isAuthenticated: false
   }

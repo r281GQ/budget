@@ -5,12 +5,14 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import styled from 'styled-components';
 
+import withAuth from './with_auth';
+
 import Transaction from './../components/transaction/transaction';
 
-const TransactionContainer = () => <Transaction />;
+const TransactionContainer = props => <Transaction {...props} />;
 
 TransactionContainer.propTypes = {};
 
-export default connect()(
-  reduxForm({ form: 'transaction' })(TransactionContainer)
+export default withAuth(
+  connect()(reduxForm({ form: 'transaction', shouldValidate:() => true })(TransactionContainer))
 );

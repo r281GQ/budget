@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import Accounts from './accounts';
+// import Accounts from './accounts';
 import Account from './account';
 
 import Transaction from './transaction';
 import Transactions from './transactions';
 
 import Grouping from './grouping';
-import Groupings from './groupings';
+// import Groupings from './groupings';
 
 import Budget from './budget';
 // import Groupings from './groupings';
@@ -22,11 +22,14 @@ import SignUp from './sign_up';
 
 import { getAccounts } from './../store/action_creators/account';
 import { getGroupings } from './../store/action_creators/grouping';
+import {whoAmI}  from './../store/action_creators/who_am_i';
 
 import withTypeContainer from './model_container';
 
 class App extends React.PureComponent {
   componentDidMount() {
+    console.log('sdfsd');
+    this.props.whoAmI();
     this.props.getAccounts();
     this.props.getGroupings();
   }
@@ -45,18 +48,16 @@ class App extends React.PureComponent {
         <Route path="/groupings" component={withTypeContainer('grouping')} />
         <Route path="/grouping/:id" component={Grouping} />
         <Route path="/budget/:id" component={Budget} />
-        <Redirect to="/login" />
+        <Route path="/budgets" component={Budget} />
       </div>
     );
   }
 }
 
-{
-  /* <Route path="/budgets" component={Groupings} /> */
-}
 App.propTypes = {
   getAccounts: PropTypes.func,
-  getGroupings: PropTypes.func
+  getGroupings: PropTypes.func,
+  whoAmI: PropTypes.func
 };
 
-export default connect(null, { getAccounts, getGroupings })(App);
+export default connect(null, { getAccounts, getGroupings,whoAmI })(App);

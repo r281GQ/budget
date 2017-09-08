@@ -1,13 +1,6 @@
 import request from './../../../../services/request';
 import * as groupings from './../actions/grouping';
 
-// export const logOut = () => dispatch =>
-//   request
-//     .get('/api/auth/logout')
-//     .then(() => {
-//       dispatch({ type: auth.LOG_OUT });
-//     })
-//     .catch(error => console.log(error));
 
 export const createGrouping = account => dispatch => {
   request

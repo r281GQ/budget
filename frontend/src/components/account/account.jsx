@@ -4,25 +4,17 @@ import { Field } from 'redux-form/immutable';
 import { Form } from 'semantic-ui-react';
 
 import ModelForm from './../model_form';
-import ReduxFormCompatibleDropDown from './../redux_form_compatible_drop_down';
+import Currency from './../form_elements/currency';
+import Name from './../form_elements/name';
 
 const Account = ({ handleFormSubmit, editForm }) => (
   <ModelForm name="Account" icon="currency" handleFormSubmit={handleFormSubmit}>
     <Field name="name" label="Name" component={Form.Input} />
     <Form.Group widths="equal">
-      <Field
-        disabled={editForm}
-        name="initialBalance"
-        label="Initial balance"
-        type="number"
-        component={Form.Input}
-      />
-      <Field
-        disabled={editForm}
-        name="currency"
-        label="Currency"
-        component={ReduxFormCompatibleDropDown}
-        options={[
+      <Name disabled = {editForm}/>
+      <Currency
+        disabled = {editForm}
+        currencies={[
           {
             key: 1,
             text: 'GBP',

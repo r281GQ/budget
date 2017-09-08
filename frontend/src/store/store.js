@@ -8,9 +8,11 @@ import thunk from 'redux-thunk';
 import account from './reducers/account';
 import auth from './reducers/auth';
 import grouping from './reducers/grouping';
+import budget from './reducers/budget';
+import transactions from './reducers/transaction';
 
 const store = createStore(
-  combineReducers({ account, auth, grouping, routing, form }),
+  combineReducers({ auth, account, budget, grouping,transactions, routing, form }),
   composeWithDevTools(applyMiddleware(thunk, routerMiddlewareInstance))
 );
 
