@@ -4,9 +4,8 @@ import { Field } from 'redux-form/immutable';
 import ReduxFormCompatibleInput from './redux_form_compatible_input';
 
 /*eslint react/prop-types:off*/
-const Name = ({disabled}) => (
+const Name = () => (
   <Field
-    disabled
     name="name"
     label="Name"
     component={ReduxFormCompatibleInput}

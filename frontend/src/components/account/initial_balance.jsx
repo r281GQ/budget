@@ -1,12 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Field } from 'redux-form/immutable';
 
 import ReduxFormCompatibleInput from './../form_elements/redux_form_compatible_input';
 
-const Amount = () => (
+const InitialBalance = ({disabled}) => (
   <Field
-    name="amount"
-    label="Amount"
+    disabled = {disabled}
+    name="initialBalance"
+    label="InitialBalance"
     type="number"
     min={0}
     step={0.01}
@@ -15,4 +17,8 @@ const Amount = () => (
   />
 );
 
-export default Amount;
+InitialBalance.propTypes = {
+  disabled: PropTypes.func
+};
+
+export default InitialBalance;

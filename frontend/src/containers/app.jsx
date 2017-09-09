@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-// import Accounts from './accounts';
+
 import Account from './account';
 
 import Transaction from './transaction';
-import Transactions from './transactions';
 
 import Grouping from './grouping';
-// import Groupings from './groupings';
+
 
 import Budget from './budget';
 // import Groupings from './groupings';
@@ -43,7 +42,7 @@ class App extends React.PureComponent {
 
         <Route path="/accounts" component={withTypeContainer('account')} />
         <Route path="/transaction/:id" component={Transaction} />
-        <Route path="/transactions" component={Transactions} />
+        <Route path="/transactions" component={withTypeContainer('transaction')} />
         <Route path="/account/:id" component={Account} />
         <Route path="/groupings" component={withTypeContainer('grouping')} />
         <Route path="/grouping/:id" component={Grouping} />

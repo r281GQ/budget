@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 
 import initialState from './../initial_state';
 import * as transactions from './../actions/transaction';
-
+// transaction
 const reducer = (state = initialState.get('transaction'), { type, payload }) => {
   switch (type) {
     case transactions.WRITE_TRANSACTIONS:

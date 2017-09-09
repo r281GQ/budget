@@ -14,7 +14,6 @@ const PaddedModelContainer = ({ children }) => (
             <Item.Group divided>{children}</Item.Group>
           </Container>
         </Grid.Column>
-        <Grid.Column>d</Grid.Column>
       </Grid.Row>
     </Grid>
   </Padded>

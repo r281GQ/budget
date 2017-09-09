@@ -1,10 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Header, Button } from 'semantic-ui-react';
+import { Form, Header, Button, Message } from 'semantic-ui-react';
 
 import PaddedFormContainer from './padded_from_container';
 
-const ModelForm = ({ handleFormSubmit, children, name, icon, invalid }) => (
+const ModelForm = ({
+  handleFormSubmit,
+  children,
+  name,
+  icon,
+  invalid,
+  error
+}) => (
   <PaddedFormContainer>
     <Header block as="h2" icon={icon} content={name} />
     <Form onSubmit={handleFormSubmit}>
@@ -12,6 +19,11 @@ const ModelForm = ({ handleFormSubmit, children, name, icon, invalid }) => (
       <Button type="submit" fluid disabled={invalid}>
         Submit
       </Button>
+      {error ? (
+        <Message negative>
+          <Message.Header>{error}</Message.Header>
+        </Message>
+      ) : null}
     </Form>
   </PaddedFormContainer>
 );
@@ -21,7 +33,8 @@ ModelForm.propTypes = {
   children: PropTypes.any,
   name: PropTypes.any,
   icon: PropTypes.any,
-  valid: PropTypes.bool
+  valid: PropTypes.bool,
+  error: PropTypes.any
 };
 
 export default ModelForm;

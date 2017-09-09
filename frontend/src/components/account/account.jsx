@@ -1,19 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form/immutable';
 import { Form } from 'semantic-ui-react';
 
 import ModelForm from './../model_form';
 import Currency from './../form_elements/currency';
 import Name from './../form_elements/name';
+import InitialBalance from './initial_balance';
 
-const Account = ({ handleFormSubmit, editForm }) => (
-  <ModelForm name="Account" icon="currency" handleFormSubmit={handleFormSubmit}>
-    <Field name="name" label="Name" component={Form.Input} />
+const Account = ({ handleFormSubmit, editForm, invalid, dirty }) => (
+  <ModelForm
+    name="Account"
+    icon="currency"
+    handleFormSubmit={handleFormSubmit}
+    invalid={invalid && dirty}
+  >
+    <Name />
     <Form.Group widths="equal">
-      <Name disabled = {editForm}/>
+      <InitialBalance disabled={editForm} />
       <Currency
-        disabled = {editForm}
+        disabled={editForm}
         currencies={[
           {
             key: 1,
@@ -27,9 +32,10 @@ const Account = ({ handleFormSubmit, editForm }) => (
 );
 
 Account.propTypes = {
-  createAccount: PropTypes.func,
-  editForm: PropTypes.bool,
-  handleFormSubmit: PropTypes.any
+  createAccount: PropTypes.func.isRequired,
+  handleFormSubmit: PropTypes.func.isRequired,
+  editForm: PropTypes.bool.isRequired,
+  dirty: PropTypes.bool.isRequired
 };
 
 export default Account;

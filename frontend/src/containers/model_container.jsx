@@ -3,16 +3,31 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
-import { deleteAccount } from './../store/action_creators/account';
-import { deleteGrouping } from './../store/action_creators/grouping';
+import { deleteAccount, getAccounts } from './../store/action_creators/account';
+import {
+  deleteTransaction,
+  getTransactions
+} from './../store/action_creators/transaction';
+import {
+  deleteGrouping,
+  getGroupings
+} from './../store/action_creators/grouping';
 import Accounts from './../components/accounts/accounts';
 import Groupings from './../components/groupings/groupings';
+import Transactions from './../components/transactions/transactions';
 
 import withAuth from './with_auth';
 
 const handlers = {
   account: deleteAccount,
-  grouping: deleteGrouping
+  grouping: deleteGrouping,
+  transaction: deleteTransaction
+};
+
+const fetchers = {
+  account: getAccounts,
+  grouping: getGroupings,
+  transaction: getTransactions
 };
 
 /*eslint react/display-name: off*/
@@ -35,15 +50,28 @@ const withUI = type => props => {
           groupings={props.collection}
         />
       );
+    case 'transaction':
+      return (
+        <Transactions
+          {...props}
+          transactionDeleteHandler={props._handleDelete}
+          transactions={props.collection}
+        />
+      );
   }
 };
 
 export default type => {
   const deleteModel = handlers[type];
+  const fetchModels = fetchers[type];
 
   const UI = withUI(type);
 
   class Container extends React.PureComponent {
+    componentDidMount() {
+      this.props.fetchModels();
+    }
+
     constructor(props) {
       super(props);
       this._handleDelete = this._handleDelete.bind(this);
@@ -65,7 +93,8 @@ export default type => {
 
   Container.propTypes = {
     collection: ImmutablePropTypes.map,
-    deleteModel: PropTypes.func
+    deleteModel: PropTypes.func,
+    fetchModels: PropTypes.func
   };
 
   const mapStateToProps = state => {
@@ -74,5 +103,7 @@ export default type => {
     };
   };
 
-  return withAuth(connect(mapStateToProps, { deleteModel })(Container));
+  return withAuth(
+    connect(mapStateToProps, { deleteModel, fetchModels })(Container)
+  );
 };

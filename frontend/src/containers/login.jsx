@@ -10,7 +10,7 @@ import Login from './../components/login/login';
 
 const LoginContainer = props =>
   props.isAuthenticated ? (
-    <Redirect to="/transactions" />
+    <Redirect to="/" />
   ) : (
     <Login handleSubmit={props.handleSubmit} logIn={props.logIn} />
   );

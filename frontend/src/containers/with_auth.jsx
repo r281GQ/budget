@@ -5,15 +5,15 @@ import { Redirect } from 'react-router-dom';
 
 /*eslint react/prop-types:off*/
 export default WrappedComponent => {
-  const WithAuth = ({ isAuthenticated }) =>
-    isAuthenticated ? <WrappedComponent /> : <Redirect to="/login" />;
+  const WithAuth = props =>
+    props.isAuthenticated ? <WrappedComponent {...props} /> : <Redirect to="/login" />;
 
   const mapStateToProps = state => {
     return {
       isAuthenticated: state.getIn(['auth', 'isAuthenticated'])
     };
   };
-  
+
   WithAuth.PropTypes = {
     isAuthenticated: PropTypes.bool
   };

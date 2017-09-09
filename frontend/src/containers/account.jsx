@@ -51,6 +51,7 @@ class AccountContainer extends React.PureComponent {
   render() {
     return (
       <Account
+        {...this.props}
         handleFormSubmit={this.props.handleSubmit(
           this.props.match.params.id === '0'
             ? this._handleCreateAccount

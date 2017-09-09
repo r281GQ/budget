@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form/immutable';
 import { Form } from 'semantic-ui-react';
 
-import Currency from './../form_elements/currency';
+import GroupingType from './grouping_type';
 import ModelForm from './../model_form';
 
 const Grouping = ({ handleSubmit, createGrouping }) => (
@@ -19,19 +19,8 @@ const Grouping = ({ handleSubmit, createGrouping }) => (
   >
     <Field name="name" label="Name" component={Form.Input} />
 
-    <Currency
-      currencies={[
-        {
-          key: 1,
-          text: 'Income',
-          value: 'income'
-        },
-        {
-          key: 2,
-          text: 'Expense',
-          value: 'expense'
-        }
-      ]}
+    <GroupingType
+      
     />
   </ModelForm>
 );

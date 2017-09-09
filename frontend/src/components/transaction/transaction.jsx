@@ -15,8 +15,9 @@ const Transaction = props => (
   <ModelForm
     name="Transaction"
     icon="usd"
-    handleFormSubmit={null}
-    invalid={props.invalid && props.dirty}
+        handleFormSubmit={props.handleFormSubmit}
+    error = {props.error}
+    invalid={props.invalid && props.anyTouched}
   >
     <Name />
     <Field name="memo" label="Memo" component={Form.Input} />
@@ -32,15 +33,20 @@ const Transaction = props => (
         ]}
       />
     </Form.Group>
-    <Account accounts={[{ key: 1, text: 'account', value: 'dssdf' }]} />
-    <Grouping grouping={[{ key: 1, text: 'account', value: 'dssdf' }]} />
-    <Budget budgets={[{ key: 1, text: 'budget', value: 'dssdf' }]} />
+    <Account accounts={props.accounts.map(account => ({ key: account._id, text: account.name, value: account._id }))} />
+    <Grouping grouping={props.groupings.map(grouping => ({ key: grouping._id, text: grouping.name, value: grouping._id }))} />
+    <Budget budgets={[{ key: 1, text: 'budget', value: 0 }]} />
     <Equity equities={[{ key: 1, text: 'equity', value: 'dssdf' }]} />
   </ModelForm>
 );
 
 Transaction.propTypes = {
-  dirty: PropTypes.bool
+  anyTouched: PropTypes.bool,
+  accounts: PropTypes.any,
+  groupings: PropTypes.any,
+  createTransaction: PropTypes.func,
+  error: PropTypes.any,
+  handleFormSubmit: PropTypes.any
 };
 
 export default Transaction;
