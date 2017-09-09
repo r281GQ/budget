@@ -77,11 +77,13 @@ class TransactionContainer extends React.PureComponent {
   }
 
   render() {
+    console.log(this.props);
     return (
       <Transaction
         {...this.props}
         accounts={this.props.accounts.toList().toJS()}
         groupings={this.props.groupings.toList().toJS()}
+        budgets={this.props.budgets.toList().toJS()}
         handleFormSubmit={this.props.handleSubmit(
           this.props.match.params.id === '0'
             ? this._handleCreateTransactions
@@ -96,6 +98,7 @@ const mapStateToProps = state => {
   return {
     accounts: state.getIn(['account', 'data']),
     groupings: state.getIn(['grouping', 'data']),
+    budgets: state.getIn(['budget', 'data']),
     transactions: state.getIn(['transaction', 'data'])
   };
 };
@@ -104,6 +107,7 @@ TransactionContainer.propTypes = {
   transactions: PropTypes.any,
   accounts: PropTypes.any,
   groupings: PropTypes.any,
+  budgets: PropTypes.any,
   createTransaction: PropTypes.func,
   updateTransaction: PropTypes.func
 };

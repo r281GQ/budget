@@ -12,15 +12,25 @@ const Accounts = ({ accounts, accountDeleteHandler }) => (
         deleteHandler={accountDeleteHandler(account._id)}
         name={account.name}
         _id={account._id}
-        description = {[{name: 'Initial Balance' , value: account.initialBalance}, {name: 'Current balance', value: account.currentBalance}]}
+        description={[
+          { name: 'Initial Balance', value: account.initialBalance },
+          { name: 'Current balance', value: account.currentBalance }
+        ]}
       />
     ))}
   </PaddedModelContainer>
 );
 
 Accounts.propTypes = {
-  accounts: PropTypes.any,
-  accountDeleteHandler: PropTypes.any
+  accounts: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+      name: PropTypes.string,
+      initialBalance: PropTypes.number,
+      currentBalance: PropTypes.number
+    })
+  ),
+  accountDeleteHandler: PropTypes.func.isRequired
 };
 
 export default Accounts;

@@ -21,7 +21,7 @@ const Account = ({ handleFormSubmit, editForm, invalid, dirty }) => (
         disabled={editForm}
         currencies={[
           {
-            key: 1,
+            key: 'GBP',
             text: 'GBP',
             value: 'GBP'
           }

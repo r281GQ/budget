@@ -17,9 +17,9 @@ const ReduxFormCompatibleDropDown = ({ disabled, input, options, label }) => (
 );
 
 ReduxFormCompatibleDropDown.propTypes = {
-  label: PropTypes.any,
-  options: PropTypes.any,
-  disabled: PropTypes.any
+  label: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(PropTypes.any),
+  disabled: PropTypes.bool
 };
 
 export default ReduxFormCompatibleDropDown;

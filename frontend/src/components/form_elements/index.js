@@ -1,4 +1,4 @@
 import Name from './name';
-import Currency from './currency'
+import Currency from './currency';
 
-export {Name, Currency}
+export { Name, Currency };
