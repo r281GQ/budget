@@ -11,7 +11,7 @@ const ModelItem = ({ deleteHandler, name, _id, description, modelType }) => (
         {name}
       </Item.Header>
       <Item.Meta>
-        <span className="cinema">Meta field</span>
+        <span className="cinema">{modelType}</span>
       </Item.Meta>
       {description.map(desc => (
         <Item.Description key={desc.name}>
@@ -20,9 +20,7 @@ const ModelItem = ({ deleteHandler, name, _id, description, modelType }) => (
       ))}
 
       <Item.Extra>
-        <Label>IMAX</Label>
-        <Label as="a">Exciting</Label>
-        <Label icon="globe" content="Additional Languages" />
+        <Label icon="usd" as={Link} to="" content="See transactoins" />
         <Button color="red" onClick={deleteHandler} floated="right">
           Delete
         </Button>

@@ -9,18 +9,31 @@ import { logOut } from './../store/action_creators/auth';
 
 import Header from './../components/header/header';
 
-const HeaderContainer = props => <Header {...props} />;
+const HeaderContainer = props => (
+  <Header
+    {...props}
+    accounts={props.accounts.toList().toJS()}
+    groupings={props.groupings.toList().toJS()}
+    budgets={props.budgets.toList().toJS()}
+  />
+);
 
 HeaderContainer.propTypes = {
   linkName: PropTypes.string,
-  linkType: PropTypes.string
+  linkType: PropTypes.string,
+  accounts: PropTypes.any,
+  groupings: PropTypes.any,
+  budgets: PropTypes.any
 };
 
 const mapStateToProps = state => {
   return {
     isAuthenticated: state.getIn(['auth', 'isAuthenticated']),
     linkName: getLinkNames(state).get('linkName'),
-    linkType: getLinkNames(state).get('linkType')
+    linkType: getLinkNames(state).get('linkType'),
+    accounts: state.getIn(['account', 'data']),
+    groupings: state.getIn(['grouping', 'data']),
+    budgets: state.getIn(['budget', 'data'])
   };
 };
 

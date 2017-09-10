@@ -1,59 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Menu, Dropdown, Search } from 'semantic-ui-react';
 
-const StyledMenu = styled(Menu)`
-  &&& {
-    background-color: rgba(44, 62, 80, 0.8);
-    border-radius: unset;
-    border: none;
-    margin: 0px;
-    box-shadow: unset;
-  }
-`;
+import FilterItem from './fitler_item';
+import SearchBar from './search_bar';
+import HeaderContainer from './header_container';
 
-const Filter = ({ isAuthenticated, history }) =>
+const Filter = ({ isAuthenticated, history, accounts, budgets, groupings }) =>
   isAuthenticated && history.location.pathname === '/transactions' ? (
-    <StyledMenu borderless>
-      <Menu.Menu>
-        <Menu.Item>
-          <Dropdown
-            placeholder="Filter by account"
-            selection
-            options={[{ text: 'sdf', key: 1, value: 3 }]}
-          />
-        </Menu.Item>
-        <Menu.Item>
-          <Dropdown
-            placeholder="Filter by grouping"
-            selection
-            options={[{ text: 'sdf', key: 1 }]}
-          />
-        </Menu.Item>
-        <Menu.Item>
-          <Dropdown
-            placeholder="Filter by budget"
-            selection
-            options={[{ text: 'sdf', key: 1 }]}
-          />
-        </Menu.Item>
-        <Menu.Item>
-          <Dropdown
-            placeholder="Filter by date"
-            selection
-            options={[{ text: 'sdf', key: 1 }]}
-          />
-        </Menu.Item>
-        <Menu.Item>
-          <Search fluid />
-        </Menu.Item>
-      </Menu.Menu>
-    </StyledMenu>
+    <HeaderContainer borderless>
+      <FilterItem type="account" collection={accounts} />
+      <FilterItem type="grouping" collection={groupings} />
+      <FilterItem type="budget" collection={budgets} />
+      <FilterItem type="date" collection={[]} />
+      <SearchBar />
+    </HeaderContainer>
   ) : null;
 
 Filter.propTypes = {
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
+  accounts: PropTypes.any,
+  groupings: PropTypes.any,
+  budgets: PropTypes.any
 };
 
 export default Filter;
