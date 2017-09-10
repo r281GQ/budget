@@ -25,13 +25,13 @@ module.exports = app => {
 
   app.use('/api/account', router);
 
-  router.post((request, response) => {
+  router.post('/',(request, response) => {
     handlePostAccount(request)
       .then(account => response.status(201).send(account))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
   });
 
-  router.put((request, response) => {
+  router.put('/',(request, response) => {
     handlePutAccount(request)
       .then(account => response.status(200).send(account))
       .catch(error => {
@@ -48,7 +48,7 @@ module.exports = app => {
       });
   });
 
-  router.get((request, response) => {
+  router.get('/',(request, response) => {
     handleGetAllAccounts(request)
       .then(account => response.status(200).send(account))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));

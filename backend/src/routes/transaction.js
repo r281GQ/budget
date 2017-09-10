@@ -25,7 +25,7 @@ module.exports = app => {
 
   app.use(`/api/transaction`,router);
 
-  router.post((request, response) => {
+  router.post('/',(request, response) => {
     handlePostTransaction(request)
       .then(transaction => response.status(201).send(transaction))
       .catch(error => {
@@ -45,7 +45,7 @@ module.exports = app => {
       });
   });
 
-  router.put((request, response) => {
+  router.put('/',(request, response) => {
     handlePutTransaction(request)
       .then(transaction => response.status(200).send(transaction))
       .catch(error => {
@@ -64,7 +64,7 @@ module.exports = app => {
       });
   });
 
-  router.get( (request, response) => {
+  router.get('/', (request, response) => {
     handleGetAllTransactions(request)
       .then(transactions => response.status(200).send(transactions))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));

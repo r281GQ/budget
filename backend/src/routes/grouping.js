@@ -24,13 +24,13 @@ module.exports = app => {
 
   router.use(authMiddleWare);
 
-  router.post( (request, response) => {
+  router.post('/', (request, response) => {
     handlePostGrouping(request)
       .then(grouping => response.status(201).send(grouping))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
   });
 
-  router.put( (request, response) => {
+  router.put('/', (request, response) => {
     handlePutGrouping(request)
       .then(grouping => response.status(200).send(grouping))
       .catch(error => {
@@ -47,7 +47,8 @@ module.exports = app => {
       });
   });
 
-  router.get( (request, response) => {
+  router.get('/', (request, response) => {
+    console.log('called');
     handleGetAllGroupings(request)
       .then(grouping => response.status(200).send(grouping))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
