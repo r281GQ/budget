@@ -1,4 +1,4 @@
-const { handleSignUp } = require('./../services/auth');
+const { handleSignUp, handleIsEmailUnique } = require('./../services/auth');
 
 module.exports = app => passport => {
   app.get('/api/auth/whoami', (request, response) => {
@@ -38,4 +38,10 @@ module.exports = app => passport => {
       response.status(200).send({ message: 'Authanticated!' });
     }
   );
+
+  app.get('/api/auth/unique/:email', (request, response) => {
+    handleIsEmailUnique(request)
+      .then(result => response.status(200).send({ result }))
+      .catch(error => console.log(error));
+  });
 };

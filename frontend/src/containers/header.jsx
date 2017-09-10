@@ -18,6 +18,7 @@ HeaderContainer.propTypes = {
 
 const mapStateToProps = state => {
   return {
+    isAuthenticated: state.getIn(['auth', 'isAuthenticated']),
     linkName: getLinkNames(state).get('linkName'),
     linkType: getLinkNames(state).get('linkType')
   };

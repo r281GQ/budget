@@ -20,6 +20,7 @@ module.exports = {
       'error',
       {
         ignore: [
+          'history',
           'meta',
           'submit',
           'pristine',
