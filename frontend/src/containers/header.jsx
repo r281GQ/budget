@@ -1,16 +1,15 @@
 import React from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import getLinkNames from './../store/selectors/link_name_selector';
-import {withRouter} from 'react-router';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
-import {logOut} from './../store/action_creators/auth'
+import getLinkNames from './../store/selectors/link_name_selector';
+
+import { logOut } from './../store/action_creators/auth';
 
 import Header from './../components/header/header';
 
-const HeaderContainer = props => {
-  return <Header {...props} />}
+const HeaderContainer = props => <Header {...props} />;
 
 HeaderContainer.propTypes = {
   linkName: PropTypes.string,
@@ -21,7 +20,9 @@ const mapStateToProps = state => {
   return {
     linkName: getLinkNames(state).get('linkName'),
     linkType: getLinkNames(state).get('linkType')
-  }
-}
+  };
+};
 
-export default withRouter(connect(mapStateToProps, {logOut}) (HeaderContainer));
+export default withRouter(
+  connect(mapStateToProps, { logOut })(HeaderContainer)
+);

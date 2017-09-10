@@ -6,8 +6,7 @@ import ModelForm from './../model_form';
 import Name from './../form_elements/name';
 
 const Grouping = ({
-  handleSubmit,
-  createGrouping,
+  handleFormSubmit,
   invalid,
   dirty,
   editForm
@@ -16,12 +15,7 @@ const Grouping = ({
     invalid={invalid && dirty}
     name="Grouping"
     icon="id card"
-    handleFormSubmit={handleSubmit(formProps => {
-      createGrouping({
-        name: formProps.get('name'),
-        type: formProps.get('type')
-      });
-    })}
+    handleFormSubmit={handleFormSubmit}
   >
     <Name />
     <GroupingType disabled={editForm} />
@@ -29,7 +23,7 @@ const Grouping = ({
 );
 
 Grouping.propTypes = {
-  createGrouping: PropTypes.func,
+  handleFormSubmit: PropTypes.func,
   dirty: PropTypes.bool,
   editForm: PropTypes.bool
 };

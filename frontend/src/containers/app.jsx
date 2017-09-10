@@ -1,19 +1,12 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-
 import Account from './account';
-
 import Transaction from './transaction';
-
 import Grouping from './grouping';
-
-
 import Budget from './budget';
-// import Groupings from './groupings';
-
 import Header from './header';
 
 import Login from './login';
@@ -21,13 +14,12 @@ import SignUp from './sign_up';
 
 import { getAccounts } from './../store/action_creators/account';
 import { getGroupings } from './../store/action_creators/grouping';
-import {whoAmI}  from './../store/action_creators/who_am_i';
+import { whoAmI } from './../store/action_creators/who_am_i';
 
 import withTypeContainer from './model_container';
 
-class App extends React.PureComponent {
+class App extends PureComponent {
   componentDidMount() {
-    console.log('sdfsd');
     this.props.whoAmI();
     this.props.getAccounts();
     this.props.getGroupings();
@@ -42,7 +34,10 @@ class App extends React.PureComponent {
 
         <Route path="/accounts" component={withTypeContainer('account')} />
         <Route path="/transaction/:id" component={Transaction} />
-        <Route path="/transactions" component={withTypeContainer('transaction')} />
+        <Route
+          path="/transactions"
+          component={withTypeContainer('transaction')}
+        />
         <Route path="/account/:id" component={Account} />
         <Route path="/groupings" component={withTypeContainer('grouping')} />
         <Route path="/grouping/:id" component={Grouping} />
@@ -54,9 +49,9 @@ class App extends React.PureComponent {
 }
 
 App.propTypes = {
-  getAccounts: PropTypes.func,
-  getGroupings: PropTypes.func,
-  whoAmI: PropTypes.func
+  getAccounts: PropTypes.func.isRequired,
+  getGroupings: PropTypes.func.isRequired,
+  whoAmI: PropTypes.func.isRequired
 };
 
-export default connect(null, { getAccounts, getGroupings,whoAmI })(App);
+export default connect(null, { getAccounts, getGroupings, whoAmI })(App);

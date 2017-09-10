@@ -1,70 +1,76 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { reduxForm } from 'redux-form/immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import styled from 'styled-components';
-import Grouping from './../components/grouping/grouping';
-import { createGrouping } from './../store/action_creators/grouping';
+import { connect } from 'react-redux';
+import { reduxForm, SubmissionError } from 'redux-form/immutable';
+import { Map } from 'immutable';
 
-// const GroupingContainer = props => <Grouping {...props} />;
+import Grouping from './../components/grouping/grouping';
+import {
+  createGrouping,
+  updateGrouping
+} from './../store/action_creators/grouping';
 
 class GroupingContainer extends React.PureComponent {
-  // constructor(props) {
-  //   super(props);
-  //   this._handleUpdateAccount = this._handleUpdateAccount.bind(this);
-  //   this._handleCreateAccount = this._handleCreateAccount.bind(this);
-  // }
+  constructor(props) {
+    super(props);
+    this._handleUpdateGrouping = this._handleUpdateGrouping.bind(this);
+    this._handleCreateGrouping = this._handleCreateGrouping.bind(this);
+  }
 
-  // componentDidMount() {
-  //   if (this.props.match.params.id !== '0') {
-  //     this.props.initialize(
-  //       this.props.accounts.find(
-  //         (value, key) => key === this.props.match.params.id
-  //       )
-  //     );
-  //   } else {
-  //     this.props.initialize(
-  //       Map().set('currency', 'GBP').set('initialBalance', 0)
-  //     );
-  //   }
-  // }
+  componentDidMount() {
+    if (this.props.match.params.id !== '0') {
+      this.props.initialize(
+        this.props.groupings.find(
+          (value, key) => key === this.props.match.params.id
+        )
+      );
+    } else {
+      this.props.initialize(Map().set('type', 'income'));
+    }
+  }
 
-  // _handleCreateAccount(formProps) {
-  //   console.log('called');
-  //   this.props.createAccount({
-  //     name: formProps.get('name'),
-  //     initialBalance: formProps.get('initialBalance'),
-  //     currency: formProps.get('currency')
-  //   });
-  // }
-  //
-  // _handleUpdateAccount(formProps) {
-  //   this.props.updateAccount({
-  //     _id: this.props.match.params.id,
-  //     name: formProps.get('name')
-  //   });
-  // }
+  _handleCreateGrouping(formProps) {
+    if (!formProps.get('name')) throw new SubmissionError({ _error: 'Name' });
+    this.props.createGrouping(formProps.toJS());
+  }
+
+  _handleUpdateGrouping(formProps) {
+    if (!formProps.get('name')) throw new SubmissionError({ _error: 'Name' });
+    this.props.updateGrouping(formProps.toJS());
+  }
 
   render() {
     return (
       <Grouping
         {...this.props}
-
+        handleFormSubmit={this.props.handleSubmit(
+          this.props.match.params.id === '0'
+            ? this._handleCreateGrouping
+            : this._handleUpdateGrouping
+        )}
         editForm={this.props.match.params.id !== '0' ? true : false}
       />
     );
   }
 }
 
-// handleFormSubmit={this.props.handleSubmit(
-//   this.props.match.params.id === '0'
-//     ? this._handleCreateAccount
-//     : this._handleUpdateAccount
-// )}
-
-GroupingContainer.propTypes = {
-
+const mapStateToProps = state => {
+  return {
+    groupings: state.getIn(['grouping', 'data'])
+  };
 };
 
-export default connect(null, {createGrouping})(reduxForm({ form: 'grouping' })(GroupingContainer));
+GroupingContainer.propTypes = {
+  groupings: ImmutablePropTypes.mapContains({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    type: PropTypes.oneOf(['income', 'expense'])
+  }),
+  createGrouping: PropTypes.func.isRequired,
+  updateGrouping: PropTypes.func.isRequired
+};
+
+export default connect(mapStateToProps, { createGrouping, updateGrouping })(
+  reduxForm({ form: 'grouping' })(GroupingContainer)
+);

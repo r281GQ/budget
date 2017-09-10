@@ -16,7 +16,7 @@ const LoginContainer = props =>
   );
 
 LoginContainer.propTypes = {
-  logIn: PropTypes.func,
+  logIn: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool
 };
 

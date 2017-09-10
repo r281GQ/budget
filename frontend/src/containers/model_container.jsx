@@ -93,8 +93,8 @@ export default type => {
 
   Container.propTypes = {
     collection: ImmutablePropTypes.map,
-    deleteModel: PropTypes.func,
-    fetchModels: PropTypes.func
+    deleteModel: PropTypes.func.isRequired,
+    fetchModels: PropTypes.func.isRequired
   };
 
   const mapStateToProps = state => {

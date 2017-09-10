@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form/immutable';
+import { Map } from 'immutable';
+
 import {
   createAccount,
   updateAccount
 } from './../store/action_creators/account';
-import {Map} from 'immutable'
-import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import Account from './../components/account/account';
 
-class AccountContainer extends React.PureComponent {
+class AccountContainer extends PureComponent {
   constructor(props) {
     super(props);
     this._handleUpdateAccount = this._handleUpdateAccount.bind(this);
@@ -27,25 +28,19 @@ class AccountContainer extends React.PureComponent {
       );
     } else {
       this.props.initialize(
-        Map().set('currency', 'GBP').set('initialBalance', 0)
+        Map()
+          .set('currency', 'GBP')
+          .set('initialBalance', 0)
       );
     }
   }
 
   _handleCreateAccount(formProps) {
-    console.log('called');
-    this.props.createAccount({
-      name: formProps.get('name'),
-      initialBalance: formProps.get('initialBalance'),
-      currency: formProps.get('currency')
-    });
+    this.props.createAccount(formProps.toJS());
   }
 
   _handleUpdateAccount(formProps) {
-    this.props.updateAccount({
-      _id: this.props.match.params.id,
-      name: formProps.get('name')
-    });
+    this.props.updateAccount(formProps.toJS());
   }
 
   render() {
@@ -64,9 +59,14 @@ class AccountContainer extends React.PureComponent {
 }
 
 AccountContainer.propTypes = {
-  accounts: ImmutablePropTypes.map,
-  updateAccount: PropTypes.func,
-  createAccount: PropTypes.func
+  accounts: ImmutablePropTypes.mapContains({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    initialBalance: PropTypes.number,
+    currency: PropTypes.string
+  }),
+  updateAccount: PropTypes.func.isRequired,
+  createAccount: PropTypes.func.isRequired
 };
 const mapStateToProps = state => {
   return {
