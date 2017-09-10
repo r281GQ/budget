@@ -8,6 +8,7 @@ const Groupings = ({ groupings, groupingDeleteHandler }) => (
   <PaddedModelContainer>
     {groupings.map(grouping => (
       <ModelItem
+        modelType="grouping"
         key={grouping._id}
         deleteHandler={groupingDeleteHandler(grouping._id)}
         name={grouping.name}

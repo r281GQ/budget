@@ -17,7 +17,10 @@ const ReduxFormCompatibleInput = props => (
 );
 
 ReduxFormCompatibleInput.propTypes = {
-  meta: PropTypes.any
+  meta: PropTypes.shape({
+    error: PropTypes.any,
+    touched: PropTypes.bool
+  })
 };
 
 export default ReduxFormCompatibleInput;

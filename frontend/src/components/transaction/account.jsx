@@ -16,7 +16,7 @@ const Account = ({ accounts }) => (
 Account.propTypes = {
   accounts: PropTypes.arrayOf(
     PropTypes.shape({
-      key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      key: PropTypes.string,
       text: PropTypes.string,
       value: PropTypes.string
     })

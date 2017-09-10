@@ -20,6 +20,7 @@ module.exports = {
       'error',
       {
         ignore: [
+          'meta',
           'submit',
           'pristine',
           'input',

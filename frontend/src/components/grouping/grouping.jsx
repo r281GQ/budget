@@ -1,13 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form/immutable';
-import { Form } from 'semantic-ui-react';
 
 import GroupingType from './grouping_type';
 import ModelForm from './../model_form';
+import Name from './../form_elements/name';
 
-const Grouping = ({ handleSubmit, createGrouping }) => (
+const Grouping = ({
+  handleSubmit,
+  createGrouping,
+  invalid,
+  dirty,
+  editForm
+}) => (
   <ModelForm
+    invalid={invalid && dirty}
     name="Grouping"
     icon="id card"
     handleFormSubmit={handleSubmit(formProps => {
@@ -17,14 +23,15 @@ const Grouping = ({ handleSubmit, createGrouping }) => (
       });
     })}
   >
-    <Field name="name" label="Name" component={Form.Input} />
-
-    <GroupingType
-      
-    />
+    <Name />
+    <GroupingType disabled={editForm} />
   </ModelForm>
 );
 
-Grouping.propTypes = { createGrouping: PropTypes.func };
+Grouping.propTypes = {
+  createGrouping: PropTypes.func,
+  dirty: PropTypes.bool,
+  editForm: PropTypes.bool
+};
 
 export default Grouping;

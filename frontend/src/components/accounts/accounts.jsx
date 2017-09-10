@@ -8,6 +8,7 @@ const Accounts = ({ accounts, accountDeleteHandler }) => (
   <PaddedModelContainer>
     {accounts.map(account => (
       <ModelItem
+        modelType="accounts"
         key={account._id}
         deleteHandler={accountDeleteHandler(account._id)}
         name={account.name}

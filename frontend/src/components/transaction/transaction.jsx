@@ -12,56 +12,62 @@ import ModelForm from './../model_form';
 import { Name, Currency } from './../form_elements/index';
 
 const Transaction = props => {
-console.log(props);
-  return(
-  <ModelForm
-    name="Transaction"
-    icon="usd"
-    handleFormSubmit={props.handleFormSubmit}
-    error={props.error}
-    invalid={props.invalid && props.anyTouched}
-  >
-    <Name />
-    <Field name="memo" label="Memo" component={Form.Input} />
-    <Form.Group widths="equal">
-      <Amount />
-      <Currency
-        disabled={false}
-        currencies={[
-          {
-            key: 'GBP',
-            text: 'GBP',
-            value: 'GBP'
-          }
-        ]}
+  return (
+    <ModelForm
+      name="Transaction"
+      icon="usd"
+      handleFormSubmit={props.handleFormSubmit}
+      error={props.error}
+      invalid={props.invalid && props.anyTouched}
+    >
+      <Name />
+      <Field name="memo" label="Memo" component={Form.Input} />
+      <Form.Group widths="equal">
+        <Amount />
+        <Currency
+          disabled={false}
+          currencies={[
+            {
+              key: 'GBP',
+              text: 'GBP',
+              value: 'GBP'
+            }
+          ]}
+        />
+      </Form.Group>
+      <Account
+        accounts={props.accounts.map(account => ({
+          key: account._id,
+          text: account.name,
+          value: account._id
+        }))}
       />
-    </Form.Group>
-    <Account
-      accounts={props.accounts.map(account => ({
-        key: account._id,
-        text: account.name,
-        value: account._id
-      }))}
-    />
-    <Grouping
-      grouping={props.groupings.map(grouping => ({
-        key: grouping._id,
-        text: grouping.name,
-        value: grouping._id
-      }))}
-    />
-    <Budget
-      budgets={props.budgets ? props.budgets
-        .concat({ name: 'No budget!', _id: 0 })
-        .map(budget => ({
-          key: budget._id,
-          text: budget.name,
-          value: budget._id
-        })): []}
-    />
-    <Equity equities={[{ key: 1, text: 'equity', value: 'dssdf' }]} />
-  </ModelForm>
-)};
+      <Grouping
+        grouping={props.groupings.map(grouping => ({
+          key: grouping._id,
+          text: grouping.name,
+          value: grouping._id
+        }))}
+      />
+      <Budget
+        budgets={
+          props.budgets ? (
+            props.budgets
+              .concat({ name: 'No budget!', _id: 0 })
+              .map(budget => ({
+                key: budget._id,
+                text: budget.name,
+                value: budget._id
+              }))
+          ) : (
+            []
+          )
+        }
+      />
+      <Equity equities={[{ key: 1, text: 'equity', value: 'dssdf' }]} />
+    </ModelForm>
+  );
+};
 
 Transaction.propTypes = {
   anyTouched: PropTypes.bool,

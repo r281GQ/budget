@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Item, Button, Label } from 'semantic-ui-react';
 
-const ModelItem = ({ deleteHandler, name, _id, description }) => (
+const ModelItem = ({ deleteHandler, name, _id, description, modelType }) => (
   <Item key={_id}>
     <Item.Content>
-      <Item.Header as={Link} to={`/account/${_id}`}>
+      <Item.Header as={Link} to={`/${modelType}/${_id}`}>
         {name}
       </Item.Header>
       <Item.Meta>
@@ -32,6 +32,7 @@ const ModelItem = ({ deleteHandler, name, _id, description }) => (
 );
 
 ModelItem.propTypes = {
+  modelType: PropTypes.oneOf(['account', 'grouping']),
   name: PropTypes.string,
   currentBalance: PropTypes.any,
   initialBalance: PropTypes.any,
