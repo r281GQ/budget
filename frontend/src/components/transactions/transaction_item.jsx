@@ -18,10 +18,34 @@ const TransactionItem = ({ transaction, transactionDeleteHandler }) => (
       </Item.Meta>
       <Item.Description>paragraph</Item.Description>
       <Item.Extra>
-        <Label icon="currency" content={`Account: ${transaction.account.name}`} as={Link} to={`/account/${transaction.account._id}`} />
-        <Label icon="id card" content={`Grouping: ${transaction.grouping.name}`} as={Link} to={`/grouping/${transaction.grouping._id}`} />
-      { transaction.budget ? <Label icon="checked calendar" content={`Budget: ${transaction.budget.name}`} as={Link} to={`/budget/${transaction.budget._id}`} />:null}
-      { transaction.equity ? <Label icon="checked calendar" content={`Budget: ${transaction.budget.name}`} as={Link} to={`/budget/${transaction.budget._id}`} />:null}
+        <Label
+          icon="currency"
+          content={`Account: ${transaction.account.name}`}
+          as={Link}
+          to={`/account/${transaction.account._id}`}
+        />
+        <Label
+          icon="id card"
+          content={`Grouping: ${transaction.grouping.name}`}
+          as={Link}
+          to={`/grouping/${transaction.grouping._id}`}
+        />
+        {transaction.budget ? (
+          <Label
+            icon="checked calendar"
+            content={`Budget: ${transaction.budget.name}`}
+            as={Link}
+            to={`/budget/${transaction.budget._id}`}
+          />
+        ) : null}
+        {transaction.equity ? (
+          <Label
+            icon="checked calendar"
+            content={`Budget: ${transaction.budget.name}`}
+            as={Link}
+            to={`/budget/${transaction.budget._id}`}
+          />
+        ) : null}
         <Button
           color="red"
           floated="right"

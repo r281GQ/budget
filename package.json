@@ -10,7 +10,7 @@
     "serve:mock": "nodemon mock/server.js",
     "serve:dev": "NODE_ENV=development concurrently \" nodemon backend/src/server.js\"  \"webpack-dev-server --hot --inline\"",
     "build": "NODE_ENV=production webpack -p",
-    "start": "node backend/src/server.js",
+    "start": "NODE_ENV=production node backend/src/server.js",
     "analyze": "ANALYZE=true NODE_ENV=production webpack -p"
   },
   "author": "Endre Vegh",
