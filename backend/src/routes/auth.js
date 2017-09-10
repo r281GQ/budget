@@ -17,7 +17,7 @@ module.exports = app => passport => {
 
   app.get('/api/auth/logout', (request, response) => {
     request.session.destroy(function(err) {
-      return response.status(200).send({ messgae: 'Successfully logged out!' });
+      return response.status(200).send({ message: 'Successfully logged out!' });
     });
   });
 

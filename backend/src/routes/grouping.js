@@ -24,13 +24,13 @@ module.exports = app => {
 
   router.use(authMiddleWare);
 
-  router.post(`/api/grouping`, (request, response) => {
+  router.post( (request, response) => {
     handlePostGrouping(request)
       .then(grouping => response.status(201).send(grouping))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
   });
 
-  router.put(`/api/grouping/:id`, (request, response) => {
+  router.put( (request, response) => {
     handlePutGrouping(request)
       .then(grouping => response.status(200).send(grouping))
       .catch(error => {
@@ -47,13 +47,13 @@ module.exports = app => {
       });
   });
 
-  router.get(`/api/grouping`, (request, response) => {
+  router.get( (request, response) => {
     handleGetAllGroupings(request)
       .then(grouping => response.status(200).send(grouping))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
   });
 
-  router.delete(`/api/grouping/:id`, (request, response) => {
+  router.delete(`/:id`, (request, response) => {
     handleDeleteGrouping(request)
       .then(() => response.status(200).send({}))
       .catch(error => {
@@ -75,5 +75,5 @@ module.exports = app => {
   // router.put(`/${ACCOUNT_BASE_URL}`, handlePutAccount);
   // router.delete(`/${ACCOUNT_BASE_URL}/:id`, handleDeleteAccount);
   // router.get(`/${ACCOUNT_BASE_URL}/:id`, handleGetAccount);
-  app.use(router);
+  app.use(`/api/grouping`,router);
 };

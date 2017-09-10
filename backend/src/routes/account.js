@@ -23,15 +23,15 @@ module.exports = app => {
 
   router.use(authMiddleWare);
 
-  app.use(router);
+  app.use('/api/account', router);
 
-  router.post(`/api/account`, (request, response) => {
+  router.post((request, response) => {
     handlePostAccount(request)
       .then(account => response.status(201).send(account))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
   });
 
-  router.put(`/api/account`, (request, response) => {
+  router.put((request, response) => {
     handlePutAccount(request)
       .then(account => response.status(200).send(account))
       .catch(error => {
@@ -48,13 +48,13 @@ module.exports = app => {
       });
   });
 
-  router.get(`/api/account`, (request, response) => {
+  router.get((request, response) => {
     handleGetAllAccounts(request)
       .then(account => response.status(200).send(account))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
   });
 
-  router.delete(`/api/account/:_id`, (request, response) => {
+  router.delete(`/:_id`, (request, response) => {
     handleDeleteAccount(request)
       .then(() => response.status(200).send({}))
       .catch(error => {

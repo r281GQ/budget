@@ -23,9 +23,9 @@ module.exports = app => {
 
   router.use(authMiddleWare);
 
-  app.use(router);
+  app.use(`/api/transaction`,router);
 
-  router.post(`/api/transaction`, (request, response) => {
+  router.post((request, response) => {
     handlePostTransaction(request)
       .then(transaction => response.status(201).send(transaction))
       .catch(error => {
@@ -45,7 +45,7 @@ module.exports = app => {
       });
   });
 
-  router.put(`/api/transaction`, (request, response) => {
+  router.put((request, response) => {
     handlePutTransaction(request)
       .then(transaction => response.status(200).send(transaction))
       .catch(error => {
@@ -64,13 +64,13 @@ module.exports = app => {
       });
   });
 
-  router.get(`/api/transaction`, (request, response) => {
+  router.get( (request, response) => {
     handleGetAllTransactions(request)
       .then(transactions => response.status(200).send(transactions))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
   });
 
-  router.delete(`/api/transaction/:_id`, (request, response) => {
+  router.delete(`/:_id`, (request, response) => {
     handleDeleteTransaction(request)
       .then(() => response.status(200).send({}))
       .catch(error => {
