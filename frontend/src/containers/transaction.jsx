@@ -77,7 +77,6 @@ class TransactionContainer extends React.PureComponent {
   }
 
   render() {
-    console.log(this.props);
     return (
       <Transaction
         {...this.props}

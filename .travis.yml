@@ -1,0 +1,12 @@
+language: node_js
+before_install:
+- npm install -g npm@latest
+node_js:
+- '8'
+script: npm run build
+deploy:
+  provider: heroku
+  skip_cleanup: true
+  app: budget-dev-react
+  api_key:
+    secure: beD9mCFSPfE/0JLueCp6nLjqPSH3TinDp21A2j7X+hp+WI2Vrl6xzNoSFsqFJoYglPEsIJvwb8FoijAky71w3H8WVPbULx56fxsrk9VV0mf0CfSejg7hRP6piay2Npgbm8runo86euPQCw/raNfWG7EuJtiiizVdrkHNlY72g85bO7wBiGHUyF2YP6Vk7PAY2krVemnEIN+aru6rwUCcQchX7fJN4JNupPgvU4D11xWexm5S4imf53GL/LL17K40qs1VcWdux9RFirjjZgr1DnPZu8OsI7AfJM8ItMypDrIVUvp4lGhgcEEt+BUbB7VhOAVtprhJrp2XKYuH3RhAHvShdHKjXrTHm+0MQJg3fd91XkrOY3Fi+jIlyo0FsEH0DY42f5BxG9YYvgjRJatDxnj3ePyogiCtB7Jp6D27KYv1aUa9CCf4F7xBAri5bZ+NFFHWF234CJJGyy9riVjIgqzbtqiDScScZZWLnnrL6ziBOTWQ8PKtVJxRcc+oaZxvpCXvheAOecWI1axu/ZfQDsKlF73O8Vg4wOwawwJo3oCY5mrL+r4OCCTq3kMdG8an9JKpUoIydqZcQCYU4uyRynv3sJyoMn3LpEpt83iMVuWkdhK2/OGN3hjYXvBqUXUxt37jEvznj48Yp3ScM/U+D7GPX0KNDqAAxOdGgTe4QdA=
