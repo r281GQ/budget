@@ -14,14 +14,18 @@ class TransactionsContainer extends PureComponent {
         {...this.props}
         accounts={this.props.accounts.toList().toJS()}
         groupings={this.props.groupings.toList().toJS()}
+        budgets={this.props.budgets.toList().toJS()}
       />
     );
   }
 }
 
 TransactionsContainer.propTypes = {
-  accounts: PropTypes.any,
-  groupings: PropTypes.any
+  accounts: ImmutablePropTypes.mapContains({
+    _id:PropTypes.string
+  }),
+  groupings: ImmutablePropTypes.map,
+  budgets: ImmutablePropTypes.map
 };
 
 const mapStateToProps = state => {

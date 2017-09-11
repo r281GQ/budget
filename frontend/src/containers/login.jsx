@@ -22,7 +22,7 @@ class LoginContainer extends PureComponent {
 
   render() {
     return this.props.isAuthenticated ? (
-      <Redirect to="/transactions" />
+      <Redirect to="/" />
     ) : (
       <Login
         {...this.props}

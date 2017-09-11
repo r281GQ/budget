@@ -71,7 +71,7 @@ module.exports = app => {
 
   router.delete(`/:_id`, (request, response) => {
     handleDeleteTransaction(request)
-      .then(() => response.status(200).send({}))
+      .then(transaction => response.status(200).send(transaction))
       .catch(error => {
         console.log(error);
         switch (error.message) {

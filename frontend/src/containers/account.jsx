@@ -68,6 +68,7 @@ AccountContainer.propTypes = {
   updateAccount: PropTypes.func.isRequired,
   createAccount: PropTypes.func.isRequired
 };
+
 const mapStateToProps = state => {
   return {
     accounts: state.getIn(['account', 'data'])

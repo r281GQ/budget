@@ -20,6 +20,9 @@ const {
   BUDGET_INCOME_CONFLICT
 } = require('./../utils/errors');
 
+const pickPropertiesForBudget = budget =>
+  _.pick(budget, ['_id', 'name', 'currency', 'defaultAllowance']);
+
 const Transaction = mongoose.model('Transaction');
 const Grouping = mongoose.model('Grouping');
 const Account = mongoose.model('Account');
@@ -30,7 +33,8 @@ const handleGetAllTransactions = (request, response) =>
   new Promise((resolve, reject) => {
     let user = extractUser(request);
 
-    Transaction.find({ user }).populate('account grouping equity budget')
+    Transaction.find({ user })
+      .populate('account grouping equity budget')
       .sort({ date: 1 })
       .then(transactions => {
         return resolve(transactions);
@@ -184,7 +188,9 @@ const handlePutTransaction = (request, response) => {
 
         return toCreate.save();
       })
-      .then(updatedTransaction => Transaction.findOne({ _id, user }).populate('account grouping'))
+      .then(updatedTransaction =>
+        Transaction.findOne({ _id, user }).populate('account grouping')
+      )
       .then(updatedTransaction => {
         const toSend = _.pick(updatedTransaction, [
           '_id',
@@ -199,8 +205,10 @@ const handlePutTransaction = (request, response) => {
           'equity'
         ]);
         // toSend.grouping = updatedTransaction.grouping._id;
-        return resolve(toSend);
+        if (!toSend.budget) return resolve(toSend);
+        return prepareDetailedBudget(toSend, user);
       })
+      .then(transaction => resolve(transaction))
       .catch(error => {
         switch (error.message) {
           case ACCOUNT_BALANCE:
@@ -217,6 +225,35 @@ const handlePutTransaction = (request, response) => {
       });
   });
 };
+
+// Budget.findOne({ _id, user })
+//   .then(budget => {
+//     if (!budget) return Promise.reject({ message: RESOURCE_NOT_FOUND });
+//     intermediate = budget;
+//     return budget.balances();
+//   })
+//   .then(balances => {
+//     intermediate = pickPropertiesForBudget(intermediate);
+//     intermediate.budgetPeriods = balances;
+//     return resolve(intermediate);
+//   })
+
+const prepareDetailedBudget = (transactionToSend, user) =>
+  new Promise((resolve, reject) => {
+    let intermediate;
+    Budget.findOne({ _id: transactionToSend.budget._id, user })
+      .then(budget => {
+        intermediate = budget;
+        return budget.balances();
+      })
+      .then(balances => {
+        intermediate = pickPropertiesForBudget(intermediate);
+        intermediate.budgetPeriods = balances;
+        transactionToSend.budget = intermediate;
+        // console.log(transactionToSend);
+        return resolve(transactionToSend);
+      });
+  });
 
 const handlePostTransaction = (request, response) => {
   return new Promise((resolve, reject) => {
@@ -253,10 +290,13 @@ const handlePostTransaction = (request, response) => {
       (equity && !idValidator(equity))
     )
       return reject({ message: ID_INVALID_OR_NOT_PRESENT });
-
+    let transactionToSend;
+    let intermediate;
     transaction
       .save()
-      .then(({_id}) => Transaction.findOne({ _id, user }).populate('account grouping'))
+      .then(({ _id }) =>
+        Transaction.findOne({ _id, user }).populate('account grouping budget')
+      )
       .then(transaction => {
         const toSend = _.pick(transaction, [
           '_id',
@@ -270,8 +310,22 @@ const handlePostTransaction = (request, response) => {
           'budget',
           'equity'
         ]);
-        return resolve(toSend);
+        transactionToSend = toSend;
+        if (!toSend.budget) return resolve(toSend);
+        return prepareDetailedBudget(transactionToSend, user);
       })
+      // .then(budget => {
+      //   // if (!budget) return Promise.reject({ message: RESOURCE_NOT_FOUND });
+      //   intermediate = budget;
+      //   return budget.balances();
+      // })
+      // .then(balances => {
+      //   intermediate = pickPropertiesForBudget(intermediate);
+      //   intermediate.budgetPeriods = balances;
+      //   transactionToSend.budget = intermediate;
+      //   return resolve(transactionToSend);
+      // })
+      .then(transaction => resolve(transaction))
       .catch(error => {
         console.log(error);
         switch (error.message) {
@@ -297,6 +351,7 @@ const handleDeleteTransaction = (request, response) => {
     if (!idValidator(_id)) return reject({ error: ID_INVALID_OR_NOT_PRESENT });
 
     Transaction.findOne({ _id, user })
+      .populate('budget')
       .then(transaction => {
         if (!transaction)
           return Promise.reject({ message: RESOURCE_NOT_FOUND });
@@ -304,9 +359,23 @@ const handleDeleteTransaction = (request, response) => {
           return Promise.reject({ message: FORBIDDEN_RESOURCE });
         return transaction.remove();
       })
-      .then(() => {
-        return resolve({});
+      .then(transaction => {
+        let toSend = _.pick(transaction, [
+          '_id',
+          'name',
+          'amount',
+          'memo',
+          'date',
+          'currency',
+          'account',
+          'grouping',
+          'budget',
+          'equity'
+        ]);
+        if (!toSend.budget) return resolve(toSend);
+        return prepareDetailedBudget(toSend, user);
       })
+      .then(transaction => resolve(transaction))
       .catch(error => {
         console.log(error);
         switch (error.message) {

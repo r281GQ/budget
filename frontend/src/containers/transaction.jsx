@@ -9,11 +9,17 @@ import {
   createTransaction,
   updateTransaction
 } from './../store/action_creators/transaction';
+import { getAccounts } from './../store/action_creators/account';
+import { getGroupings } from './../store/action_creators/grouping';
+import { getBudgets } from './../store/action_creators/budget';
 import withAuth from './with_auth';
 import Transaction from './../components/transaction/transaction';
 
 class TransactionContainer extends React.PureComponent {
   componentDidMount() {
+    // this.props.getAccounts();
+    // this.props.getGroupings();
+    // this.props.getBudgets();
     if (this.props.match.params.id !== '0') {
       this.props.initialize(
         this.props.transactions
@@ -57,6 +63,7 @@ class TransactionContainer extends React.PureComponent {
       });
     }
     this.props.createTransaction(formProps.toJS());
+    // this.props.get
   }
 
   _handleUpdateTransactions(formProps) {
@@ -107,12 +114,15 @@ TransactionContainer.propTypes = {
   accounts: PropTypes.any,
   groupings: PropTypes.any,
   budgets: PropTypes.any,
+  getAccounts: PropTypes.func.isRequired,
+  getGroupings: PropTypes.func.isRequired,
+  getBudgets: PropTypes.func.isRequired,
   createTransaction: PropTypes.func,
   updateTransaction: PropTypes.func
 };
 
 export default withAuth(
-  connect(mapStateToProps, { createTransaction, updateTransaction })(
+  connect(mapStateToProps, { createTransaction, updateTransaction, getAccounts, getGroupings, getBudgets })(
     reduxForm({ form: 'transaction' })(TransactionContainer)
   )
 );

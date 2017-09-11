@@ -11,10 +11,11 @@ const Transactions = ({
   transactions,
   transactionDeleteHandler,
   accounts,
-  groupings
+  groupings,
+  budgets
 }) => (
   <div>
-    <Filter accounts={accounts} groupings={groupings} budgets={[]} />
+    <Filter accounts={accounts} groupings={groupings} budgets={budgets} />
     <Padded>
       <Grid stackable>
         <Grid.Row columns={2}>
@@ -56,6 +57,7 @@ Transactions.propTypes = {
   transactions: PropTypes.any,
   accounts: PropTypes.any,
   groupings: PropTypes.any,
+  budgets: PropTypes.any,
   transactionDeleteHandler: PropTypes.func
 };
 

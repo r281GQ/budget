@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
-const Auth = ({ logOut, isAuthenticated }) =>
+const Auth = ({ logOut, isAuthenticated, userName }) =>
   isAuthenticated ? (
     <Menu.Menu position="right">
-      <Menu.Item content="Endre" />
+      <Menu.Item content={`Welcome, ${userName}`} />
       <Menu.Item content="LogOut" icon="log out" onClick={logOut} />
     </Menu.Menu>
   ) : (
@@ -18,6 +18,7 @@ const Auth = ({ logOut, isAuthenticated }) =>
 
 Auth.propTypes = {
   isAuthenticated: PropTypes.bool,
+  userName: PropTypes.string,
   logOut: PropTypes.func.isRequired
 };
 

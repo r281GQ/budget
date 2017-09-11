@@ -14,10 +14,10 @@ const StyledMenu = styled(Menu)`
     margin: 0px;
     box-shadow: unset;
     @media (max-width: 768px) {
-      width: 100% !important;
+      width: 100%!important;
     }
     @media (min-width: 768px) {
-      height: 100%;
+
       float: left;
       margin: 0 0.5rem 0 0;
       ::after {
