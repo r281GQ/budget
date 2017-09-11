@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import Transactions from './../components/transactions/transactions';
+import Message from './message';
 
 class TransactionsContainer extends PureComponent {
   componentWillUnmount() {}
@@ -12,6 +13,7 @@ class TransactionsContainer extends PureComponent {
     return (
       <Transactions
         {...this.props}
+        RenderMessage = {Message}
         accounts={this.props.accounts.toList().toJS()}
         groupings={this.props.groupings.toList().toJS()}
         budgets={this.props.budgets.toList().toJS()}

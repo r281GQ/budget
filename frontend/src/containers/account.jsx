@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form/immutable';
 import { Map } from 'immutable';
-
+import Message from './message';
 import {
   createAccount,
   updateAccount
@@ -47,6 +47,7 @@ class AccountContainer extends PureComponent {
     return (
       <Account
         {...this.props}
+        RenderMessage = {Message}
         handleFormSubmit={this.props.handleSubmit(
           this.props.match.params.id === '0'
             ? this._handleCreateAccount

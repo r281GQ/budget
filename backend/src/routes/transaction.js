@@ -76,13 +76,13 @@ module.exports = app => {
         console.log(error);
         switch (error.message) {
           case ACCOUNT_BALANCE:
-            return response.status(400).send({ message: ACCOUNT_BALANCE });
+            return response.status(400).send({ error: ACCOUNT_BALANCE });
           case RESOURCE_NOT_FOUND:
-            return response.status(404).send({ message: RESOURCE_NOT_FOUND });
+            return response.status(404).send({ error: RESOURCE_NOT_FOUND });
           case FORBIDDEN_RESOURCE:
-            return response.status(403).send({ message: FORBIDDEN_RESOURCE });
+            return response.status(403).send({ error: FORBIDDEN_RESOURCE });
           default:
-            return response.status(500).send({ message: SERVER_ERROR });
+            return response.status(500).send({ error: SERVER_ERROR });
         }
       });
   });

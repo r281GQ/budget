@@ -14,6 +14,7 @@ import { Name, Currency } from './../form_elements/index';
 const Transaction = props => {
   return (
     <ModelForm
+      {...props}
       name="Transaction"
       icon="usd"
       handleFormSubmit={props.handleFormSubmit}
@@ -60,11 +61,37 @@ const Transaction = props => {
                 value: budget._id
               }))
           ) : (
-            []
+            [
+              {
+                key: 0,
+                text: 'No budget!',
+                value: 0
+              }
+            ]
           )
         }
       />
-      <Equity equities={[{ key: 1, text: 'equity', value: 'dssdf' }]} />
+      <Equity
+        equities={
+          props.equities ? (
+            props.equities
+              .concat({ name: 'No equity!', _id: 0 })
+              .map(equity => ({
+                key: equity._id,
+                text: equity.name,
+                value: equity._id
+              }))
+          ) : (
+            [
+              {
+                key: 0,
+                text: 'No equity!',
+                value: 0
+              }
+            ]
+          )
+        }
+      />
     </ModelForm>
   );
 };
@@ -93,6 +120,11 @@ Transaction.propTypes = {
       _id: PropTypes.string,
       name: PropTypes.string,
       type: PropTypes.oneOf(['income', 'expense'])
+    })
+  ),
+  equities: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string
     })
   ),
   error: PropTypes.shape({

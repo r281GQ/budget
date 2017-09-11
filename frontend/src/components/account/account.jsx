@@ -7,8 +7,9 @@ import Currency from './../form_elements/currency';
 import Name from './../form_elements/name';
 import InitialBalance from './initial_balance';
 
-const Account = ({ handleFormSubmit, editForm, invalid, dirty }) => (
+const Account = ({ handleFormSubmit, editForm, invalid, dirty, RenderMessage }) => (
   <ModelForm
+    RenderMessage = {RenderMessage}
     name="Account"
     icon="currency"
     handleFormSubmit={handleFormSubmit}
@@ -35,7 +36,8 @@ Account.propTypes = {
   createAccount: PropTypes.func.isRequired,
   handleFormSubmit: PropTypes.func.isRequired,
   editForm: PropTypes.bool.isRequired,
-  dirty: PropTypes.bool.isRequired
+  dirty: PropTypes.bool.isRequired,
+  RenderMessage: PropTypes.any
 };
 
 export default Account;

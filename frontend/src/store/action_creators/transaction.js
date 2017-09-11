@@ -1,37 +1,46 @@
 import request from './../../../../services/request';
-import * as transaction from './../actions/transaction';
+import { stopSubmit } from 'redux-form/immutable';
+
+import * as transactions from './../actions/transaction';
 import * as budget from './../actions/budget';
 import * as account from './../actions/account';
 
-import { stopSubmit } from 'redux-form/immutable';
+import * as messageActions from './message';
 
-export const createTransaction = account => dispatch => {
+export const createTransaction = transaction => dispatch => {
   request
-    .post('/api/transaction', account)
+    .post('/api/transaction', transaction)
     .then(({ data }) => {
-      dispatch({ type: transaction.WRITE_TRANSACTION, payload: data });
-      console.log(data);
-      if(data.budget)
-      dispatch({ type: budget.WRITE_BUDGET, payload: data.budget });
+      dispatch({ type: transactions.WRITE_TRANSACTION, payload: data });
+      if (data.budget)
+        dispatch({ type: budget.WRITE_BUDGET, payload: data.budget });
       dispatch({ type: account.WRITE_ACCOUNT, payload: data.account });
-
-      // return request.get(`/api/budget/${data.budget._id}`);
+      dispatch(
+        messageActions.setSuccessMessage(
+          'Transaction was created successfully!'
+        )
+      );
+      dispatch(messageActions.openMessage());
     })
-    // .then(({ data }) => {
-    // })
     .catch(error =>
       dispatch(stopSubmit('transaction', { _error: error.response.data.error }))
     );
 };
 
-export const updateTransaction = account => dispatch => {
+export const updateTransaction = transaction => dispatch => {
   request
-    .put('/api/transaction', account)
+    .put('/api/transaction', transaction)
     .then(({ data }) => {
-      dispatch({ type: transaction.WRITE_TRANSACTION, payload: data });
-      if(data.budget)
-      dispatch({ type: budget.WRITE_BUDGET, payload: data.budget });
-        dispatch({ type: account.WRITE_ACCOUNT, payload: data.account });
+      dispatch({ type: transactions.WRITE_TRANSACTION, payload: data });
+      if (data.budget)
+        dispatch({ type: budget.WRITE_BUDGET, payload: data.budget });
+      dispatch({ type: account.WRITE_ACCOUNT, payload: data.account });
+      dispatch(
+        messageActions.setSuccessMessage(
+          'Transaction was updated successfully!'
+        )
+      );
+      dispatch(messageActions.openMessage());
     })
     .catch(error =>
       dispatch(stopSubmit('transaction', { _error: error.response.data.error }))
@@ -41,20 +50,29 @@ export const updateTransaction = account => dispatch => {
 export const deleteTransaction = _id => dispatch => {
   request
     .delete(`/api/transaction/${_id}`)
-    .then(({data}) => {
-      dispatch({ type: transaction.DELETE_TRANSACTION, payload: _id });
-      if(data.budget)
-      dispatch({ type: budget.WRITE_BUDGET, payload: data.budget });
-        dispatch({ type: account.WRITE_ACCOUNT, payload: data.account });
+    .then(({ data }) => {
+      dispatch({ type: transactions.DELETE_TRANSACTION, payload: _id });
+      if (data.budget)
+        dispatch({ type: budget.WRITE_BUDGET, payload: data.budget });
+      dispatch({ type: account.WRITE_ACCOUNT, payload: data.account });
+      dispatch(
+        messageActions.setSuccessMessage(
+          'Transaction was deleted successfully!'
+        )
+      );
+      dispatch(messageActions.openMessage());
     })
-    .catch(error => dispatch(stopSubmit('transaction', { _error: error.response.data.error })));
+    .catch(error => {
+      dispatch(messageActions.setErrorMessage(error.response.data.error));
+      dispatch(messageActions.openMessage());
+    });
 };
 
 export const getTransactions = () => dispatch => {
   request
     .get('/api/transaction')
-    .then(({ data }) => {
-      dispatch({ type: transaction.WRITE_TRANSACTIONS, payload: data });
-    })
-    .catch(error => console.log(error));
+    .then(({ data }) =>
+      dispatch({ type: transactions.WRITE_TRANSACTIONS, payload: data })
+    )
+    .catch(() => undefined);
 };

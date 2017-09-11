@@ -10,9 +10,19 @@ import auth from './reducers/auth';
 import grouping from './reducers/grouping';
 import budget from './reducers/budget';
 import transaction from './reducers/transaction';
+import message from './reducers/message';
 
 const store = createStore(
-  combineReducers({ auth, account, budget, grouping,transaction, routing, form }),
+  combineReducers({
+    auth,
+    account,
+    budget,
+    grouping,
+    transaction,
+    message,
+    routing,
+    form
+  }),
   composeWithDevTools(applyMiddleware(thunk, routerMiddlewareInstance))
 );
 

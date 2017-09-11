@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { reduxForm, SubmissionError } from 'redux-form/immutable';
 import { Map } from 'immutable';
 
+import Message from './message';
+
 import {
   createTransaction,
   updateTransaction
@@ -17,9 +19,6 @@ import Transaction from './../components/transaction/transaction';
 
 class TransactionContainer extends React.PureComponent {
   componentDidMount() {
-    // this.props.getAccounts();
-    // this.props.getGroupings();
-    // this.props.getBudgets();
     if (this.props.match.params.id !== '0') {
       this.props.initialize(
         this.props.transactions
@@ -28,8 +27,8 @@ class TransactionContainer extends React.PureComponent {
             map
               .update('account', value => value.get('_id'))
               .update('grouping', value => value.get('_id'))
-              .update('budget', value => value ? value.get('_id') : value)
-              .update('equity', value =>  value ? value.get('_id') : value)
+              .update('budget', value => (value ? value.get('_id') : 0))
+              .update('equity', value => (value ? value.get('_id') : 0))
           )
       );
     } else {
@@ -40,6 +39,8 @@ class TransactionContainer extends React.PureComponent {
             .set('amount', 0)
             .set('account', this.props.accounts.first().get('_id'))
             .set('grouping', this.props.groupings.first().get('_id'))
+            .set('equity', 0)
+            .set('budget', 0)
         )
       );
     }
@@ -53,7 +54,7 @@ class TransactionContainer extends React.PureComponent {
 
   _handleCreateTransactions(formProps) {
     if (
-      formProps.get('budget') === 0 &&
+      formProps.get('budget') !== 0 &&
       this.props.groupings
         .find((value, key) => key === formProps.get('grouping'))
         .get('type') === 'income'
@@ -62,13 +63,16 @@ class TransactionContainer extends React.PureComponent {
         _error: `You can't create transacton with budget and income!`
       });
     }
-    this.props.createTransaction(formProps.toJS());
-    // this.props.get
+    this.props.createTransaction({
+      ...formProps.toJS(),
+      budget:
+        formProps.get('budget') === 0 ? undefined : formProps.get('budget')
+    });
   }
 
   _handleUpdateTransactions(formProps) {
     if (
-      formProps.get('budget') === 0 &&
+      formProps.get('budget') !== 0 &&
       this.props.groupings
         .find((value, key) => key === formProps.get('grouping'))
         .get('type') === 'income'
@@ -79,7 +83,9 @@ class TransactionContainer extends React.PureComponent {
     }
     this.props.updateTransaction({
       _id: this.props.match.params.id,
-      ...formProps.toJS()
+      ...formProps.toJS(),
+      budget:
+        formProps.get('budget') === 0 ? undefined : formProps.get('budget')
     });
   }
 
@@ -87,6 +93,7 @@ class TransactionContainer extends React.PureComponent {
     return (
       <Transaction
         {...this.props}
+        RenderMessage={Message}
         accounts={this.props.accounts.toList().toJS()}
         groupings={this.props.groupings.toList().toJS()}
         budgets={this.props.budgets.toList().toJS()}
@@ -122,7 +129,11 @@ TransactionContainer.propTypes = {
 };
 
 export default withAuth(
-  connect(mapStateToProps, { createTransaction, updateTransaction, getAccounts, getGroupings, getBudgets })(
-    reduxForm({ form: 'transaction' })(TransactionContainer)
-  )
+  connect(mapStateToProps, {
+    createTransaction,
+    updateTransaction,
+    getAccounts,
+    getGroupings,
+    getBudgets
+  })(reduxForm({ form: 'transaction' })(TransactionContainer))
 );

@@ -12,12 +12,18 @@ const Transactions = ({
   transactionDeleteHandler,
   accounts,
   groupings,
-  budgets
+  budgets,
+  RenderMessage
 }) => (
   <div>
     <Filter accounts={accounts} groupings={groupings} budgets={budgets} />
     <Padded>
       <Grid stackable>
+        <Grid.Row columns={1}>
+          <Grid.Column>
+            <RenderMessage />
+          </Grid.Column>
+        </Grid.Row>
         <Grid.Row columns={2}>
           <Grid.Column>
             <Header block as="h2" content="Incomes" color="green" />
@@ -58,6 +64,7 @@ Transactions.propTypes = {
   accounts: PropTypes.any,
   groupings: PropTypes.any,
   budgets: PropTypes.any,
+  RenderMessage: PropTypes.any,
   transactionDeleteHandler: PropTypes.func
 };
 

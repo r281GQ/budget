@@ -205,9 +205,16 @@ const handlePutTransaction = (request, response) => {
           'equity'
         ]);
         // toSend.grouping = updatedTransaction.grouping._id;
-        if (!toSend.budget) return resolve(toSend);
-        return prepareDetailedBudget(toSend, user);
+        return prepareDetailedAccount(toSend, user);
+        // if (!toSend.budget) return resolve(toSend);
+        // return prepareDetailedBudget(toSend, user);
       })
+      .then(
+        transaction =>
+          !transaction.budget
+            ? resolve(transaction)
+            : prepareDetailedBudget(transaction, user)
+      )
       .then(transaction => resolve(transaction))
       .catch(error => {
         switch (error.message) {
@@ -225,7 +232,8 @@ const handlePutTransaction = (request, response) => {
       });
   });
 };
-
+const pickPropertiesForAccount = account =>
+  _.pick(account, ['_id', 'name', 'initialBalance']);
 // Budget.findOne({ _id, user })
 //   .then(budget => {
 //     if (!budget) return Promise.reject({ message: RESOURCE_NOT_FOUND });
@@ -254,6 +262,24 @@ const prepareDetailedBudget = (transactionToSend, user) =>
         return resolve(transactionToSend);
       });
   });
+
+const prepareDetailedAccount = (transactionToSend, user) => {
+  return new Promise((resolve, reject) => {
+    Account.findOne({ _id: transactionToSend.account._id, user })
+      .then(account => {
+        accountToSend = account;
+        return account.currentBalance();
+      })
+      .then(currentBalance => {
+        const reducedAccount = pickPropertiesForAccount(accountToSend);
+        reducedAccount.currentBalance = currentBalance;
+        console.log(currentBalance);
+        transactionToSend.account = reducedAccount;
+        console.log(transactionToSend);
+        resolve(transactionToSend);
+      });
+  });
+};
 
 const handlePostTransaction = (request, response) => {
   return new Promise((resolve, reject) => {
@@ -311,22 +337,18 @@ const handlePostTransaction = (request, response) => {
           'equity'
         ]);
         transactionToSend = toSend;
-        if (!toSend.budget) return resolve(toSend);
-        return prepareDetailedBudget(transactionToSend, user);
+        return prepareDetailedAccount(toSend, user);
+        // if (!toSend.budget) return resolve(toSend);
+        // return prepareDetailedBudget(toSend, user);
       })
-      // .then(budget => {
-      //   // if (!budget) return Promise.reject({ message: RESOURCE_NOT_FOUND });
-      //   intermediate = budget;
-      //   return budget.balances();
-      // })
-      // .then(balances => {
-      //   intermediate = pickPropertiesForBudget(intermediate);
-      //   intermediate.budgetPeriods = balances;
-      //   transactionToSend.budget = intermediate;
-      //   return resolve(transactionToSend);
-      // })
+      .then(
+        transaction =>
+          !transaction.budget
+            ? (transaction)
+            : prepareDetailedBudget(transaction, user)
+      )
       .then(transaction => resolve(transaction))
-      .catch(error => {
+      .catch(error=> {
         console.log(error);
         switch (error.message) {
           case ACCOUNT_BALANCE:
@@ -351,7 +373,7 @@ const handleDeleteTransaction = (request, response) => {
     if (!idValidator(_id)) return reject({ error: ID_INVALID_OR_NOT_PRESENT });
 
     Transaction.findOne({ _id, user })
-      .populate('budget')
+      .populate('account budget')
       .then(transaction => {
         if (!transaction)
           return Promise.reject({ message: RESOURCE_NOT_FOUND });
@@ -372,9 +394,16 @@ const handleDeleteTransaction = (request, response) => {
           'budget',
           'equity'
         ]);
-        if (!toSend.budget) return resolve(toSend);
-        return prepareDetailedBudget(toSend, user);
+        return prepareDetailedAccount(toSend, user);
+        // if (!toSend.budget) return resolve(toSend);
+        // return prepareDetailedBudget(toSend, user);
       })
+      .then(
+        transaction =>
+          !transaction.budget
+            ? resolve(transaction)
+            : prepareDetailedBudget(transaction, user)
+      )
       .then(transaction => resolve(transaction))
       .catch(error => {
         console.log(error);

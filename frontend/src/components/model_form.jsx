@@ -10,7 +10,8 @@ const ModelForm = ({
   name,
   icon,
   invalid,
-  error
+  error,
+  RenderMessage
 }) => (
   <PaddedFormContainer>
     <Header block as="h2" icon={icon} content={name} />
@@ -25,6 +26,7 @@ const ModelForm = ({
         </Message>
       ) : null}
     </Form>
+    <RenderMessage duration={3000} autoClose/>
   </PaddedFormContainer>
 );
 
@@ -34,6 +36,7 @@ ModelForm.propTypes = {
   name: PropTypes.any,
   icon: PropTypes.any,
   valid: PropTypes.bool,
+  RenderMessage: PropTypes.any,
   error: PropTypes.any
 };
 

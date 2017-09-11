@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import PaddedModelContainer from './../padded_model_container';
 import ModelItem from './../model_item';
 
-const Accounts = ({ accounts, accountDeleteHandler }) => (
+const Accounts = ({ accounts, accountDeleteHandler, RenderMessage }) => (
   <PaddedModelContainer>
+    <RenderMessage/>
     {accounts.map(account => (
       <ModelItem
         modelType="account"
@@ -31,7 +32,8 @@ Accounts.propTypes = {
       currentBalance: PropTypes.number
     })
   ),
-  accountDeleteHandler: PropTypes.func.isRequired
+  accountDeleteHandler: PropTypes.func.isRequired,
+  RenderMessage: PropTypes.any
 };
 
 export default Accounts;

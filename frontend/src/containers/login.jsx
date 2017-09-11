@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form/immutable';
 import { Redirect } from 'react-router-dom';
-
+import Message from './message';
 import { logIn } from './../store/action_creators/auth';
 import Login from './../components/login/login';
 
@@ -26,6 +26,7 @@ class LoginContainer extends PureComponent {
     ) : (
       <Login
         {...this.props}
+        RenderMessage = {Message}
         handleFormSubmit={this.props.handleSubmit(this._handleLogin)}
       />
     );

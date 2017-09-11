@@ -8,10 +8,10 @@ import Transaction from './transaction';
 import Grouping from './grouping';
 import Budget from './budget';
 import Header from './header';
-import authAware from './authAware';
-
 import Login from './login';
 import SignUp from './sign_up';
+
+import authAware from './authAware';
 
 import { getAccounts } from './../store/action_creators/account';
 import { getGroupings } from './../store/action_creators/grouping';
@@ -21,9 +21,7 @@ import { whoAmI } from './../store/action_creators/who_am_i';
 import withTypeContainer from './model_container';
 
 class App extends PureComponent {
-
-  componentDidMount(){
-
+  componentDidMount() {
     this.props.whoAmI();
     this.props.getAccounts();
     this.props.getGroupings();

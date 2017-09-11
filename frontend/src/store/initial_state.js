@@ -16,6 +16,9 @@ export default fromJS({
   transaction: {
     data: {}
   },
+  message:{
+    
+  },
   auth: {
     isAuthenticated: false
   }

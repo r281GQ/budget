@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
 import { deleteAccount, getAccounts } from './../store/action_creators/account';
+import Message from './message';
 import {
   deleteTransaction,
   getTransactions
@@ -85,6 +86,7 @@ export default type => {
     render() {
       return (
         <UI
+          RenderMessage={Message}
           _handleDelete={this._handleDelete}
           collection={this.props.collection.toList().toJS()}
         />
