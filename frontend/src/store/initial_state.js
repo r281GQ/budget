@@ -7,6 +7,9 @@ export default fromJS({
   grouping: {
     data: {}
   },
+  equity: {
+    data: {}
+  },
   budget: {
     data: {}
   },

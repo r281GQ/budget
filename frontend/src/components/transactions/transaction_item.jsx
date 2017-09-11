@@ -1,11 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import styled from 'styled-components';
-
+import moment from 'moment';
 import { Link } from 'react-router-dom';
-import SideBar from './../sidebar/sidebar';
-import { Grid, Item, Label, Button, Icon, Header } from 'semantic-ui-react';
+import { Item, Label, Button, Icon } from 'semantic-ui-react';
 
 const TransactionItem = ({ transaction, transactionDeleteHandler }) => (
   <Item key={transaction._id}>
@@ -15,8 +12,11 @@ const TransactionItem = ({ transaction, transactionDeleteHandler }) => (
       </Item.Header>
       <Item.Meta>
         <span className="cinema">{transaction.amount}</span>
+        <Icon name="gbp" />
       </Item.Meta>
-      <Item.Description>paragraph</Item.Description>
+      <Item.Description>
+        {moment(transaction.date).format('DD-MM-YYYY')}
+      </Item.Description>
       <Item.Extra>
         <Label
           icon="currency"
@@ -41,9 +41,9 @@ const TransactionItem = ({ transaction, transactionDeleteHandler }) => (
         {transaction.equity ? (
           <Label
             icon="checked calendar"
-            content={`Budget: ${transaction.budget.name}`}
+            content={`Equity: ${transaction.equity.name}`}
             as={Link}
-            to={`/budget/${transaction.budget._id}`}
+            to={`/equity/${transaction.equity._id}`}
           />
         ) : null}
         <Button
@@ -60,7 +60,7 @@ const TransactionItem = ({ transaction, transactionDeleteHandler }) => (
 
 TransactionItem.propTypes = {
   transaction: PropTypes.any,
-  transactionDeleteHandler: PropTypes.func
+  transactionDeleteHandler: PropTypes.func.isRequired
 };
 
 export default TransactionItem;

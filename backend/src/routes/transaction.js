@@ -2,6 +2,7 @@ module.exports = app => {
   const router = require('express').Router();
 
   const authMiddleWare = require('./../services/auth_middleware');
+
   const {
     ID_INVALID_OR_NOT_PRESENT,
     FORBIDDEN_RESOURCE,
@@ -11,21 +12,19 @@ module.exports = app => {
     DEPENDENCIES_NOT_MET,
     BUDGET_INCOME_CONFLICT
   } = require('./../utils/errors');
+
   const {
     handleDeleteTransaction,
     handlePutTransaction,
     handlePostTransaction,
-    handleGetAllTransactions,
+    handleGetAllTransactions
   } = require('./../services/transaction');
-
-  // router.get(`/${ACCOUNT_BASE_URL}`, handleGetAllAccounts);
-  //
 
   router.use(authMiddleWare);
 
-  app.use(`/api/transaction`,router);
+  app.use(`/api/transaction`, router);
 
-  router.post('/',(request, response) => {
+  router.post('/', (request, response) => {
     handlePostTransaction(request)
       .then(transaction => response.status(201).send(transaction))
       .catch(error => {
@@ -45,7 +44,7 @@ module.exports = app => {
       });
   });
 
-  router.put('/',(request, response) => {
+  router.put('/', (request, response) => {
     handlePutTransaction(request)
       .then(transaction => response.status(200).send(transaction))
       .catch(error => {
@@ -87,8 +86,4 @@ module.exports = app => {
         }
       });
   });
-
-  // router.put(`/${ACCOUNT_BASE_URL}`, handlePutAccount);
-  // router.delete(`/${ACCOUNT_BASE_URL}/:id`, handleDeleteAccount);
-  // router.get(`/${ACCOUNT_BASE_URL}/:id`, handleGetAccount);
 };

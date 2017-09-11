@@ -5,6 +5,7 @@ import { Menu, Dropdown } from 'semantic-ui-react';
 const FilterItem = ({ collection, type }) => (
   <Menu.Item>
     <Dropdown
+      fluid
       defaultValue={0}
       placeholder={`Filter by ${type}`}
       selection

@@ -2,9 +2,9 @@ const { handleSignUp, handleIsEmailUnique } = require('./../services/auth');
 
 module.exports = app => passport => {
   app.get('/api/auth/whoami', (request, response) => {
-    if (!request.user)
-      return response.status(401).send({ message: 'Unauthanticated!' });
-    return response.status(200).send(request.user);
+    !request.user
+      ? response.status(401).send({ message: 'Unauthanticated!' })
+      : response.status(200).send(request.user);
   });
 
   app.post(
@@ -16,18 +16,20 @@ module.exports = app => passport => {
   );
 
   app.get('/api/auth/logout', (request, response) => {
-    request.session.destroy(function(err) {
-      return response.status(200).send({ message: 'Successfully logged out!' });
-    });
+    request.session.destroy(
+      error =>
+        error
+          ? response.status(500).send({})
+          : response.status(200).send({ message: 'Successfully logged out!' })
+    );
   });
 
   const signUpMiddleWare = (request, response, next) => {
     handleSignUp(request)
       .then(user => {
-        console.log(user);
         next();
       })
-      .catch(error => console.log(error));
+      .catch(error => next(error));
   };
 
   app.post(

@@ -2,6 +2,7 @@ module.exports = app => {
   const router = require('express').Router();
 
   const authMiddleWare = require('./../services/auth_middleware');
+
   const {
     ID_INVALID_OR_NOT_PRESENT,
     FORBIDDEN_RESOURCE,
@@ -11,6 +12,7 @@ module.exports = app => {
     DEPENDENCIES_NOT_MET,
     BUDGET_INCOME_CONFLICT
   } = require('./../utils/errors');
+
   const {
     handleGetAllGroupings,
     handleDeleteGrouping,
@@ -19,10 +21,9 @@ module.exports = app => {
     handlePutAGrouping
   } = require('./../services/grouping');
 
-  // router.get(`/${ACCOUNT_BASE_URL}`, handleGetAllAccounts);
-  //
-
   router.use(authMiddleWare);
+
+  app.use(`/api/grouping`, router);
 
   router.post('/', (request, response) => {
     handlePostGrouping(request)
@@ -72,9 +73,4 @@ module.exports = app => {
         }
       });
   });
-
-  // router.put(`/${ACCOUNT_BASE_URL}`, handlePutAccount);
-  // router.delete(`/${ACCOUNT_BASE_URL}/:id`, handleDeleteAccount);
-  // router.get(`/${ACCOUNT_BASE_URL}/:id`, handleGetAccount);
-  app.use(`/api/grouping`,router);
 };

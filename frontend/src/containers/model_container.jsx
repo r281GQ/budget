@@ -14,7 +14,8 @@ import {
 } from './../store/action_creators/grouping';
 import Accounts from './../components/accounts/accounts';
 import Groupings from './../components/groupings/groupings';
-import Transactions from './../components/transactions/transactions';
+import Transactions from './transactions';
+// import Transactions from './../components/transactions/transactions';
 
 import withAuth from './with_auth';
 
