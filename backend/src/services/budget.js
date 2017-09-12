@@ -117,9 +117,9 @@ const handleDeleteBudget = (request, response) => {
       .catch(error => {
         switch (error.message) {
           case RESOURCE_NOT_FOUND:
-            return response.status(404).send({ error: RESOURCE_NOT_FOUND });
+            return reject({ message: RESOURCE_NOT_FOUND });
           default:
-            return response.status(500).send({ error: SERVER_ERROR });
+            return reject({ message: SERVER_ERROR });
         }
       });
   });

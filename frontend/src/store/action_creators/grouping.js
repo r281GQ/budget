@@ -1,6 +1,10 @@
+import { stopSubmit } from 'redux-form/immutable';
 import request from './../../../../services/request';
 import * as groupings from './../actions/grouping';
 
+import { getTransactions } from './transaction';
+// import { getTransactions } from './transaction';
+import { getBudgets } from './budget';
 
 export const createGrouping = account => dispatch => {
   request
@@ -34,5 +38,7 @@ export const deleteGrouping = _id => dispatch => {
     .then(({ data }) => {
       dispatch({ type: groupings.DELETE_GROUPING, payload: _id });
     })
+    .then(() => dispatch(getTransactions()))
+    .then(() => dispatch(getBudgets()))
     .catch(error => console.log(error));
 };

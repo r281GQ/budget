@@ -1,6 +1,10 @@
+import { stopSubmit } from 'redux-form/immutable';
+
 import request from './../../../../services/request';
 import * as auth from './../actions/auth';
 import { whoAmI } from './who_am_i';
+
+import * as messageActions from './message';
 
 export const logOut = () => dispatch =>
   request
@@ -16,7 +20,9 @@ export const logIn = userInfo => dispatch => {
     .then(() => {
       dispatch(whoAmI());
     })
-    .catch(error => console.log(error));
+    .catch(error => {
+      dispatch(stopSubmit('login', { _error: error.response.data.error }));
+    });
 };
 export const signUp = userInfo => dispatch =>
   request

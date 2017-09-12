@@ -3,15 +3,23 @@ const { handleSignUp, handleIsEmailUnique } = require('./../services/auth');
 module.exports = app => passport => {
   app.get('/api/auth/whoami', (request, response) => {
     !request.user
-      ? response.status(401).send({ message: 'Unauthanticated!' })
+      ? response.status(401).send({ error: 'Unauthanticated!' })
       : response.status(200).send(request.user);
   });
 
   app.post(
     '/api/auth/local/login',
-    passport.authenticate('local'),
+    passport.authenticate('local', {failureRedirect: '/api/auth/failure'}),
     (request, response) => {
       response.status(200).send({ message: 'Authanticated!' });
+    }
+  );
+
+
+  app.get(
+    '/api/auth/failure',
+    (request, response) => {
+      response.status(401).send({ error: 'Invalid credentials!' });
     }
   );
 

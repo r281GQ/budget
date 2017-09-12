@@ -5,8 +5,9 @@ import ModelForm from './../model_form';
 import Email from './../form_elements/email';
 import Password from './../form_elements/password';
 
-const Login = ({ handleFormSubmit, invalid, dirty, RenderMessage }) => (
+const Login = ({ handleFormSubmit, invalid, dirty, RenderMessage, error }) => (
   <ModelForm
+    error={error}
     RenderMessage = {RenderMessage}
     name="Log in"
     icon="home"
@@ -21,7 +22,8 @@ const Login = ({ handleFormSubmit, invalid, dirty, RenderMessage }) => (
 Login.propTypes = {
   handleFormSubmit: PropTypes.func.isRequired,
   dirty: PropTypes.bool,
-  RenderMessage: PropTypes.any
+  RenderMessage: PropTypes.any,
+  error: PropTypes.any
 };
 
 export default Login;
