@@ -9,19 +9,15 @@ module.exports = app => passport => {
 
   app.post(
     '/api/auth/local/login',
-    passport.authenticate('local', {failureRedirect: '/api/auth/failure'}),
+    passport.authenticate('local', { failureRedirect: '/api/auth/failure' }),
     (request, response) => {
       response.status(200).send({ message: 'Authanticated!' });
     }
   );
 
-
-  app.get(
-    '/api/auth/failure',
-    (request, response) => {
-      response.status(401).send({ error: 'Invalid credentials!' });
-    }
-  );
+  app.get('/api/auth/failure', (request, response) => {
+    response.status(401).send({ error: 'Invalid credentials!' });
+  });
 
   app.get('/api/auth/logout', (request, response) => {
     request.session.destroy(

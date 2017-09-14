@@ -26,7 +26,7 @@ const Budget = ({ handleFormSubmit, editForm, invalid, dirty }) => (
   >
     <Name />
     <Form.Group widths="equal">
-      <DefaultAllowance/>
+      <DefaultAllowance disabled={editForm}/>
       <Currency
         disabled={editForm}
         currencies={[

@@ -12,7 +12,7 @@ passport.serializeUser(({ id }, done) => done(null, id));
 passport.deserializeUser((id, done) =>
   User.findById(id)
     .then(user => done(null, user))
-    .catch(error => console.log(error))
+    .catch(error => done(error))
 );
 
 const mapToDbProps = profile => ({
@@ -42,6 +42,6 @@ passport.use(
                     result ? done(null, user) : done(null, false)
                 )
         )
-        .catch(error => console.log(error))
+        .catch(error => done(error))
   )
 );

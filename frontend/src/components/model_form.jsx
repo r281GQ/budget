@@ -26,7 +26,7 @@ const ModelForm = ({
         </Message>
       ) : null}
     </Form>
-    <RenderMessage duration={3000} autoClose/>
+    {RenderMessage ? <RenderMessage duration={3000} autoClose /> : null}
   </PaddedFormContainer>
 );
 

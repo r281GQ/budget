@@ -12,17 +12,24 @@ import budget from './reducers/budget';
 import transaction from './reducers/transaction';
 import message from './reducers/message';
 
+import initialState from './initial_state';
+
+const withLogOut = reducer => (state, action) =>
+  action.type === 'LOG_OUT' ? (state = initialState) : reducer(state, action);
+
 const store = createStore(
-  combineReducers({
-    auth,
-    account,
-    budget,
-    grouping,
-    transaction,
-    message,
-    routing,
-    form
-  }),
+  withLogOut(
+    combineReducers({
+      auth,
+      account,
+      budget,
+      grouping,
+      transaction,
+      message,
+      routing,
+      form
+    })
+  ),
   composeWithDevTools(applyMiddleware(thunk, routerMiddlewareInstance))
 );
 

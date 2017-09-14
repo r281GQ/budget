@@ -1,4 +1,3 @@
-
 const createRedisClient = (isProduction, redisUrl) => {
   const redis = require('redis');
   if (isProduction) {

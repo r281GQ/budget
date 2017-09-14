@@ -7,12 +7,13 @@ import UserName from './user_name';
 import Password from './../form_elements/password';
 import PasswordAgain from './../form_elements/password_again';
 
-const SignUp = ({ handleFormSubmit, invalid, dirty }) => (
+const SignUp = ({ handleFormSubmit, invalid, dirty , RenderMessage}) => (
   <ModelForm
     name="Sign up"
     icon="add user"
     handleFormSubmit={handleFormSubmit}
     invalid={invalid && dirty}
+    RenderMessage = {RenderMessage}
   >
     <UserName />
     <Email />
@@ -23,7 +24,8 @@ const SignUp = ({ handleFormSubmit, invalid, dirty }) => (
 
 SignUp.propTypes = {
   handleFormSubmit: PropTypes.func.isRequired,
-  dirty: PropTypes.bool
+  dirty: PropTypes.bool,
+  RenderMessage: PropTypes.any
 };
 
 export default SignUp;

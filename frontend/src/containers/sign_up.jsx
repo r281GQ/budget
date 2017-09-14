@@ -7,6 +7,7 @@ import { Redirect } from 'react-router-dom';
 import { signUp } from './../store/action_creators/auth';
 
 import SignUp from './../components/sign_up/sign_up';
+import Message from './message';
 
 class SignUpContainer extends PureComponent {
   constructor(props) {
@@ -27,6 +28,7 @@ class SignUpContainer extends PureComponent {
     ) : (
       <SignUp
         {...this.props}
+        RenderMessage={Message}
         handleFormSubmit={this.props.handleSubmit(this._handleSignUp)}
       />
     );

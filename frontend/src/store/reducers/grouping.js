@@ -8,6 +8,8 @@ const reducer = (state = initialState.get('grouping'), { type, payload }) => {
   switch (type) {
     case grouping.WRITE_GROUPINGS:
       return state.set('data', fromJS(_.keyBy(payload, '_id')));
+    case grouping.DELETE_GROUPING:
+      return state.deleteIn(['data', payload]);
     case grouping.WRITE_GROUPING:
       return state.update('data', value =>
         value.set(payload._id, fromJS(payload))

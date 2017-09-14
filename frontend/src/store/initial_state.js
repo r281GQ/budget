@@ -7,18 +7,14 @@ export default fromJS({
   grouping: {
     data: {}
   },
-  equity: {
-    data: {}
-  },
+
   budget: {
     data: {}
   },
   transaction: {
     data: {}
   },
-  message:{
-    
-  },
+  message: {},
   auth: {
     isAuthenticated: false
   }

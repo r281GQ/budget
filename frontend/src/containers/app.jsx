@@ -4,14 +4,14 @@ import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Account from './account';
-import Transaction from './transaction';
+import Transaction from './transaction_guard';
 import Grouping from './grouping';
 import Budget from './budget';
 import Header from './header';
 import Login from './login';
 import SignUp from './sign_up';
 
-import authAware from './authAware';
+import authAware from './auth_aware';
 
 import { getAccounts } from './../store/action_creators/account';
 import { getGroupings } from './../store/action_creators/grouping';
@@ -28,11 +28,13 @@ class App extends PureComponent {
     this.props.getBudgets();
   }
 
-  componentWillReceiveProps() {
-    this.props.whoAmI();
-    this.props.getAccounts();
-    this.props.getGroupings();
-    this.props.getBudgets();
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isAuthenticated && !this.props.isAuthenticated) {
+      this.props.whoAmI();
+      this.props.getAccounts();
+      this.props.getGroupings();
+      this.props.getBudgets();
+    }
   }
 
   render() {
@@ -52,6 +54,7 @@ class App extends PureComponent {
         <Route path="/groupings" component={withTypeContainer('grouping')} />
         <Route path="/grouping/:id" component={Grouping} />
         <Route path="/budget/:id" component={Budget} />
+        <Route path="/budgets" component={withTypeContainer('budget')} />
       </div>
     );
   }
@@ -61,9 +64,10 @@ App.propTypes = {
   getAccounts: PropTypes.func.isRequired,
   getGroupings: PropTypes.func.isRequired,
   getBudgets: PropTypes.func.isRequired,
-  whoAmI: PropTypes.func.isRequired
+  whoAmI: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
 };
 
-export default authAware(
-  connect(null, { getAccounts, getGroupings, getBudgets, whoAmI })(App)
-);
+export default authAware(connect(null, { getAccounts, getGroupings, getBudgets, whoAmI })(
+  App
+));

@@ -5,7 +5,7 @@ module.exports = app => express => {
     app.use(express.static(path.join(__dirname, '/../../../build')));
   } else {
     app.get('/', (request, response) =>
-      response.send({ message: 'main page' })
+      response.send({ message: 'Main Page!' })
     );
   }
 

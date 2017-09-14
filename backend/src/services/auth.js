@@ -1,15 +1,13 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
-const handleSignUp = ({ body }) => {
-  console.log(body);
-  return new Promise((resolve, reject) =>
+const handleSignUp = ({ body }) =>
+  new Promise((resolve, reject) =>
     new User(body)
       .save()
       .then(user => resolve(user))
       .catch(error => reject(error))
   );
-};
 
 const handleIsEmailUnique = ({ params: { email } }) =>
   new Promise((resolve, reject) =>

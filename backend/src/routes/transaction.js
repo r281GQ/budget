@@ -2,7 +2,6 @@ module.exports = app => {
   const router = require('express').Router();
 
   const authMiddleWare = require('./../services/auth_middleware');
-
   const {
     ID_INVALID_OR_NOT_PRESENT,
     FORBIDDEN_RESOURCE,
@@ -12,7 +11,6 @@ module.exports = app => {
     DEPENDENCIES_NOT_MET,
     BUDGET_INCOME_CONFLICT
   } = require('./../utils/errors');
-
   const {
     handleDeleteTransaction,
     handlePutTransaction,
@@ -28,7 +26,6 @@ module.exports = app => {
     handlePostTransaction(request)
       .then(transaction => response.status(201).send(transaction))
       .catch(error => {
-        console.log(error);
         switch (error.error) {
           case ACCOUNT_BALANCE:
             return response.status(400).send({ error: ACCOUNT_BALANCE });
@@ -73,7 +70,6 @@ module.exports = app => {
     handleDeleteTransaction(request)
       .then(transaction => response.status(200).send(transaction))
       .catch(error => {
-        console.log(error);
         switch (error.message) {
           case ACCOUNT_BALANCE:
             return response.status(400).send({ error: ACCOUNT_BALANCE });

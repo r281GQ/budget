@@ -16,9 +16,9 @@ const Equtiy = ({ equities }) => (
 Equtiy.propTypes = {
   equities: PropTypes.arrayOf(
     PropTypes.shape({
-    key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       text: PropTypes.string,
-      value: PropTypes.string
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     })
   )
 };

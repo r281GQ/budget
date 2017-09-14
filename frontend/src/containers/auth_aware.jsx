@@ -1,12 +1,10 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 /*eslint react/prop-types:off*/
 export default WrappedComponent => {
-  const AuthAware = props =>
-     <WrappedComponent {...props} />
+  const AuthAware = props => <WrappedComponent {...props} />;
 
   const mapStateToProps = state => {
     return {

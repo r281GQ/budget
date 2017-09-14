@@ -19,7 +19,7 @@ const ModelItem = ({ deleteHandler, name, _id, description, modelType }) => (
         </Item.Description>
       ))}
       <Item.Extra>
-        <Label icon="usd" as={Link} to="" content="See transactoins" />
+        <Label icon="usd" as={Link} to="" content="See transactions" />
         <Button color="red" onClick={deleteHandler} floated="right">
           Delete
         </Button>

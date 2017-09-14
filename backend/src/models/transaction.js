@@ -102,12 +102,16 @@ module.exports = mongoose => {
   transactionSchema.pre('save', function(next) {
     let transaction = this;
     let Account = mongoose.model('Account');
+    let Grouping = mongoose.model('Grouping');
 
-    Account.findOne({ _id: transaction.account, user: transaction.user })
-      .then(account => {
-        if (!account) return next(new Error(DEPENDENCIES_NOT_MET));
-        if (transaction.grouping.type === 'income') return next();
-        return account.currentBalance();
+    Promise.all([
+      Account.findOne({ _id: transaction.account, user: transaction.user }),
+      Grouping.findOne({ _id: transaction.grouping, user: transaction.user })
+    ])
+      .then(items => {
+        if (!items[0]) return next(new Error(DEPENDENCIES_NOT_MET));
+        if (items[1].type === 'income') return next();
+        return items[0].currentBalance();
       })
       .then(currentBalance => {
         if (currentBalance - transaction.amount < 0)

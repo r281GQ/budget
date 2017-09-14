@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { reduxForm, SubmissionError } from 'redux-form/immutable';
 import { Map } from 'immutable';
 
+import Message from './message';
 import Grouping from './../components/grouping/grouping';
 import {
   createGrouping,
@@ -44,6 +45,7 @@ class GroupingContainer extends React.PureComponent {
     return (
       <Grouping
         {...this.props}
+        RenderMessage = {Message}
         handleFormSubmit={this.props.handleSubmit(
           this.props.match.params.id === '0'
             ? this._handleCreateGrouping

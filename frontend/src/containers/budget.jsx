@@ -12,7 +12,6 @@
 //
 // export default connect()(reduxForm({ form: 'budget' })(BudgetContainer));
 
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -20,10 +19,9 @@ import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form/immutable';
 import { Map } from 'immutable';
 
-import {
-  createBudget,
-  updateBudget
-} from './../store/action_creators/budget';
+import Message from './message';
+
+import { createBudget, updateBudget } from './../store/action_creators/budget';
 
 import Budget from './../components/budget/budget';
 
@@ -44,6 +42,8 @@ class BudgetContainer extends PureComponent {
     } else {
       this.props.initialize(
         Map()
+          .set('defaultAllowance', 0)
+          .set('currency', 'GBP')
       );
     }
   }
@@ -60,6 +60,7 @@ class BudgetContainer extends PureComponent {
     return (
       <Budget
         {...this.props}
+        RenderMessage={Message}
         handleFormSubmit={this.props.handleSubmit(
           this.props.match.params.id === '0'
             ? this._handleCreateBudget

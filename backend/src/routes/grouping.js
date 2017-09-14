@@ -2,7 +2,6 @@ module.exports = app => {
   const router = require('express').Router();
 
   const authMiddleWare = require('./../services/auth_middleware');
-
   const {
     ID_INVALID_OR_NOT_PRESENT,
     FORBIDDEN_RESOURCE,
@@ -12,13 +11,12 @@ module.exports = app => {
     DEPENDENCIES_NOT_MET,
     BUDGET_INCOME_CONFLICT
   } = require('./../utils/errors');
-
   const {
     handleGetAllGroupings,
     handleDeleteGrouping,
     handleGetGrouping,
     handlePostGrouping,
-    handlePutAGrouping
+    handlePutGrouping
   } = require('./../services/grouping');
 
   router.use(authMiddleWare);
@@ -49,13 +47,12 @@ module.exports = app => {
   });
 
   router.get('/', (request, response) => {
-    console.log('called');
     handleGetAllGroupings(request)
       .then(grouping => response.status(200).send(grouping))
       .catch(error => response.status(500).send({ error: SERVER_ERROR }));
   });
 
-  router.delete(`/:id`, (request, response) => {
+  router.delete(`/:_id`, (request, response) => {
     handleDeleteGrouping(request)
       .then(() => response.status(200).send({}))
       .catch(error => {

@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
 import { deleteAccount, getAccounts } from './../store/action_creators/account';
+import { deleteBudget, getBudgets } from './../store/action_creators/budget';
 import Message from './message';
 import {
   deleteTransaction,
@@ -15,6 +16,7 @@ import {
 } from './../store/action_creators/grouping';
 import Accounts from './../components/accounts/accounts';
 import Groupings from './../components/groupings/groupings';
+import Budgets from './../components/budgets/budgets';
 import Transactions from './transactions';
 // import Transactions from './../components/transactions/transactions';
 
@@ -23,13 +25,15 @@ import withAuth from './with_auth';
 const handlers = {
   account: deleteAccount,
   grouping: deleteGrouping,
-  transaction: deleteTransaction
+  transaction: deleteTransaction,
+  budget: deleteBudget
 };
 
 const fetchers = {
   account: getAccounts,
   grouping: getGroupings,
-  transaction: getTransactions
+  transaction: getTransactions,
+  budget: getBudgets
 };
 
 /*eslint react/display-name: off*/
@@ -58,6 +62,14 @@ const withUI = type => props => {
           {...props}
           transactionDeleteHandler={props._handleDelete}
           transactions={props.collection}
+        />
+      );
+    case 'budget':
+      return (
+        <Budgets
+          {...props}
+          budgetDeleteHandler={props._handleDelete}
+          budgets={props.collection}
         />
       );
   }

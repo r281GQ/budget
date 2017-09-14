@@ -2,7 +2,9 @@ import { createSelector } from 'reselect';
 import { fromJS } from 'immutable';
 
 const pathName = state =>
-  state.getIn(['routing', 'location', 'pathname']).slice(1);
+  state.getIn(['routing', 'location'])
+    ? state.getIn(['routing', 'location', 'pathname']).slice(1)
+    : '';
 
 const result = pathName =>
   pathName.includes('/')

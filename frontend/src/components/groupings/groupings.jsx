@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import PaddedModelContainer from './../padded_model_container';
 import ModelItem from './../model_item';
 
-const Groupings = ({ groupings, groupingDeleteHandler }) => (
+const Groupings = ({ groupings, groupingDeleteHandler, RenderMessage }) => (
   <PaddedModelContainer>
+    <RenderMessage/>
     {groupings.map(grouping => (
       <ModelItem
         modelType="grouping"
@@ -21,7 +22,8 @@ const Groupings = ({ groupings, groupingDeleteHandler }) => (
 
 Groupings.propTypes = {
   groupings: PropTypes.any,
-  groupingDeleteHandler: PropTypes.any
+  groupingDeleteHandler: PropTypes.any,
+  RenderMessage: PropTypes.any
 };
 
 export default Groupings;

@@ -15,72 +15,57 @@ const {
 const pickPropertiesForAccount = account =>
   _.pick(account, ['_id', 'name', 'initialBalance']);
 
-const handleGetAllAccounts = (request, response) => {
-  return new Promise((resolve, reject) => {
+const handleGetAllAccounts = request =>
+  new Promise((resolve, reject) =>
+    Account.find({ user: extractUser(request) })
+      .sort({ name: 1 })
+      .then(accounts => {
+        Promise.all(
+          accounts.map(account => account.currentBalance())
+        ).then(currentBalances => {
+          let reduced = accounts.map(account =>
+            pickPropertiesForAccount(account)
+          );
+          let prefixedCurrentBalances = currentBalances.map(currentBalance => {
+            return { currentBalance };
+          });
+          resolve(_.merge(reduced, prefixedCurrentBalances));
+        });
+      })
+      .catch(error => {
+        reject({ error: SERVER_ERROR });
+      })
+  );
 
-    let accountsToSend;
-    const user = extractUser(request);
-
-    Account.find({ user })
-    .sort({ name: 1 })
-    .then(accounts => {
-      accountsToSend = accounts;
-      return Promise.all(
-        accounts.map(account => {
-          return account.currentBalance();
-        })
-      );
-    })
-    .then(currentBalances => {
-      let reduced = accountsToSend.map(account =>
-        pickPropertiesForAccount(account)
-      );
-      let prefixedCurrentBalances = currentBalances.map(currentBalance => {
-        return { currentBalance };
-      });
-      resolve(_.merge(reduced, prefixedCurrentBalances));
-    })
-    .catch(error => {
-      reject({ error: SERVER_ERROR });
-    });
-  })
-};
-
-const handlePutAccount = (request, response) => {
-  return new Promise((resolve, reject) => {
+const handlePutAccount = request =>
+  new Promise((resolve, reject) => {
     const { _id, name } = request.body;
 
     if (!idValidator(_id))
       return reject({ message: ID_INVALID_OR_NOT_PRESENT });
 
-    const user = extractUser(request);
-
-    let accountToSend;
-
-    Account.findOne({ _id, user })
-      .then(account => {
-        if (!account) return Promise.reject({ message: RESOURCE_NOT_FOUND });
-
-        return Account.findOneAndUpdate(
-          { _id },
-          { $set: { name } },
-          { new: true }
-        );
-      })
-      .then(account => {
-        accountToSend = account;
-        return account.currentBalance();
-      })
-      .then(currentBalance => {
-        resolve(
-          _.extend(pickPropertiesForAccount(accountToSend), {
-            currentBalance
-          })
-        );
-      })
+    Account.findOne({ _id, user: extractUser(request) })
+      .then(
+        account =>
+          !account
+            ? Promise.reject({ message: RESOURCE_NOT_FOUND })
+            : Account.findOneAndUpdate(
+                { _id },
+                { $set: { name } },
+                { new: true }
+              )
+      )
+      .then(account =>
+        account.currentBalance().then(currentBalance =>
+          resolve(
+            _.extend(pickPropertiesForAccount(account), {
+              currentBalance
+            })
+          )
+        )
+      )
       .catch(error => reject(error));
   });
-};
 
 const handlePostAccount = request =>
   new Promise((resolve, reject) => {
@@ -94,47 +79,38 @@ const handlePostAccount = request =>
 
     account.user = extractUser(request);
 
-    let accountToSend;
-
     account
       .save()
-      .then(account => {
-        accountToSend = account;
-        return account.currentBalance();
-      })
-      .then(currentBalance => {
-        const reducedAccount = pickPropertiesForAccount(accountToSend);
-        reducedAccount.currentBalance = currentBalance;
-        resolve(reducedAccount);
-      })
+      .then(account =>
+        account.currentBalance().then(currentBalance => {
+          const reducedAccount = pickPropertiesForAccount(account);
+          reducedAccount.currentBalance = currentBalance;
+          resolve(reducedAccount);
+        })
+      )
       .catch(error => {
         reject(error);
       });
   });
 
-
-const handleDeleteAccount = (request, response) => {
-  return new Promise ((resolve, reject) => {
+const handleDeleteAccount = request =>
+  new Promise((resolve, reject) => {
     const user = extractUser(request);
-    const _id = request.params._id
+    const _id = request.params._id;
 
     if (!idValidator(_id))
       return reject({ message: ID_INVALID_OR_NOT_PRESENT });
 
     Account.findOne({ _id, user })
-      .then(account => {
-        if (!account) return Promise.reject({ message: RESOURCE_NOT_FOUND });
-        return account.remove();
-      })
-      .then(() => {
-        return resolve({});
-      })
-      .catch(error => {
-        console.log(error);
-        return reject(error)
-      });
-  })
-};
+      .then(
+        account =>
+          !account
+            ? Promise.reject({ message: RESOURCE_NOT_FOUND })
+            : account.remove()
+      )
+      .then(account => resolve(account))
+      .catch(error => reject(error));
+  });
 
 module.exports = {
   handleGetAllAccounts,

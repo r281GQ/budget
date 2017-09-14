@@ -9,13 +9,15 @@ const Grouping = ({
   handleFormSubmit,
   invalid,
   dirty,
-  editForm
+  editForm,
+  RenderMessage
 }) => (
   <ModelForm
     invalid={invalid && dirty}
     name="Grouping"
     icon="id card"
     handleFormSubmit={handleFormSubmit}
+    RenderMessage={RenderMessage}
   >
     <Name />
     <GroupingType disabled={editForm} />
@@ -25,7 +27,8 @@ const Grouping = ({
 Grouping.propTypes = {
   handleFormSubmit: PropTypes.func,
   dirty: PropTypes.bool,
-  editForm: PropTypes.bool
+  editForm: PropTypes.bool,
+  RenderMessage: PropTypes.any
 };
 
 export default Grouping;

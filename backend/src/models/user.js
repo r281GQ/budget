@@ -38,8 +38,8 @@ module.exports = mongoose => {
 
     if (!user.googleAuthId)
       user.isNew || user.isModified('password')
-        ? bcrypt.hash(user.password, 10, (err, hash) => {
-            if (err) next(err);
+        ? bcrypt.hash(user.password, 10, (error, hash) => {
+            if (error) next(error);
             user.password = hash;
             next();
           })
@@ -47,42 +47,50 @@ module.exports = mongoose => {
     else next();
   });
 
-  userSchema.pre('remove', function(next){
+  userSchema.pre('remove', function(next) {
     const Transaction = mongoose.model('Transaction');
-    Transaction.remove({user: {$in: this}})
+    Transaction.remove({ user: { $in: this } })
       .then(() => next())
-      .catch((err) => {next(err);});
+      .catch(err => {
+        next(err);
+      });
   });
 
-  userSchema.pre('remove', function(next){
+  userSchema.pre('remove', function(next) {
     const Budget = mongoose.model('Budget');
-    Budget.remove({user: {$in: this}})
+    Budget.remove({ user: { $in: this } })
       .then(() => next())
-      .catch((err) => {next(err);});
+      .catch(err => {
+        next(err);
+      });
   });
 
-  userSchema.pre('remove', function(next){
+  userSchema.pre('remove', function(next) {
     const Account = mongoose.model('Account');
-    Account.remove({user: {$in: this}})
+    Account.remove({ user: { $in: this } })
       .then(() => next())
-      .catch((err) => {next(err);});
+      .catch(err => {
+        next(err);
+      });
   });
 
-
-  userSchema.pre('remove', function(next){
+  userSchema.pre('remove', function(next) {
     const Grouping = mongoose.model('Grouping');
-    Grouping.remove({user: {$in: this}})
+    Grouping.remove({ user: { $in: this } })
       .then(() => next())
-      .catch((err) => {next(err);});
+      .catch(err => {
+        next(err);
+      });
   });
 
-  userSchema.pre('remove', function(next){
+  userSchema.pre('remove', function(next) {
     const Equity = mongoose.model('Equity');
-    Equity.remove({user: {$in: this}})
+    Equity.remove({ user: { $in: this } })
       .then(() => next())
-      .catch((err) => {next(err);});
+      .catch(err => {
+        next(err);
+      });
   });
-
 
   mongoose.model('User', userSchema);
 };
