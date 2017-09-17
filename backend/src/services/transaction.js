@@ -230,7 +230,6 @@ const prepareDetailedBudget = (transactionToSend, user) =>
         budget = pickPropertiesForBudget(budget);
         budget.budgetPeriods = balances;
         transactionToSend.budget = budget;
-        // console.log(transactionToSend);
         return resolve(transactionToSend);
       });
     });

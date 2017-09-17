@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message } from 'semantic-ui-react';
 
-const Warning = () => (
+const Warning = ({ header, text }) => (
   <Message warning style={{ flexGrow: 1 }}>
     <Message.Header>
       You must create an account and a grouping before you can create a
@@ -13,6 +13,9 @@ const Warning = () => (
   </Message>
 );
 
-Warning.propTypes = {};
+Warning.propTypes = {
+  header: PropTypes.string,
+  text: PropTypes.string
+};
 
 export default Warning;

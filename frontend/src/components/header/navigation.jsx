@@ -4,7 +4,8 @@ import { Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 const Navigation = props =>
-  props.isAuthenticated ? (
+
+   props.isAuthenticated ? (
     <Menu.Menu position="left">
       {props.linkType === 'create' ? (
         <Menu.Item
@@ -22,14 +23,28 @@ const Navigation = props =>
         />
       )}
       <Menu.Item
+        active={props.location.pathname.includes('transaction')}
         as={Link}
         to="/transactions"
         content="Transactions"
         icon="usd"
       />
-      <Menu.Item as={Link} to="/accounts" content="Accounts" icon="currency" />
-      <Menu.Item as={Link} to="/groupings" content="Groupings" icon="id card" />
       <Menu.Item
+        active={props.location.pathname.includes('account')}
+        as={Link}
+        to="/accounts"
+        content="Accounts"
+        icon="currency"
+      />
+      <Menu.Item
+        active={props.location.pathname.includes('grouping')}
+        as={Link}
+        to="/groupings"
+        content="Groupings"
+        icon="id card"
+      />
+      <Menu.Item
+        active={props.location.pathname.includes('budget')}
         as={Link}
         to="/budgets"
         content="Budgets"
@@ -37,6 +52,7 @@ const Navigation = props =>
       />
     </Menu.Menu>
   ) : null;
+
 
 Navigation.propTypes = {
   linkName: PropTypes.string,

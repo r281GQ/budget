@@ -10,6 +10,7 @@ import {
   updateAccount
 } from './../store/action_creators/account';
 
+import withAuth from './with_auth';
 import Account from './../components/account/account';
 
 class AccountContainer extends PureComponent {
@@ -75,6 +76,6 @@ const mapStateToProps = state => {
     accounts: state.getIn(['account', 'data'])
   };
 };
-export default connect(mapStateToProps, { createAccount, updateAccount })(
+export default withAuth(connect(mapStateToProps, { createAccount, updateAccount })(
   reduxForm({ form: 'account' })(AccountContainer)
-);
+));

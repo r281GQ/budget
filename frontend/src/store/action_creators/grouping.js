@@ -16,8 +16,13 @@ export const createGrouping = grouping => dispatch => {
       );
       dispatch(messageActions.openMessage());
     })
-    .catch(error =>
-      dispatch(stopSubmit('grouping', { _error: error.response.data.error }))
+    .catch(
+      error =>
+        error.response.status === 401
+          ? dispatch({ type: 'LOG_OUT' })
+          : dispatch(
+              stopSubmit('grouping', { _error: error.response.data.error })
+            )
     );
 };
 

@@ -70,7 +70,8 @@ module.exports = mongoose => {
         }
 
       monthsToCreate.push(now);
-      let budgetPeriods = _.map(monthsToCreate, month => ({
+
+      let budgetPeriods = monthsToCreate.map(month => ({
         month,
         allowance: this.defaultAllowance
       }));

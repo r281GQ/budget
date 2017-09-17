@@ -18,7 +18,6 @@ import Accounts from './../components/accounts/accounts';
 import Groupings from './../components/groupings/groupings';
 import Budgets from './../components/budgets/budgets';
 import Transactions from './transactions';
-// import Transactions from './../components/transactions/transactions';
 
 import withAuth from './with_auth';
 

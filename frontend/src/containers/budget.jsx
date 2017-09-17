@@ -1,16 +1,3 @@
-// import React from 'react';
-// // import PropTypes from 'prop-types';
-// // import ImmutablePropTypes from 'react-immutable-proptypes';
-// import { connect } from 'react-redux';
-// import { reduxForm } from 'redux-form/immutable';
-//
-// import Budget from './../components/budget/budget';
-//
-// const BudgetContainer = () => <Budget />;
-//
-// BudgetContainer.propTypes = {};
-//
-// export default connect()(reduxForm({ form: 'budget' })(BudgetContainer));
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -20,7 +7,7 @@ import { reduxForm } from 'redux-form/immutable';
 import { Map } from 'immutable';
 
 import Message from './message';
-
+import withAuth from './with_auth'
 import { createBudget, updateBudget } from './../store/action_creators/budget';
 
 import Budget from './../components/budget/budget';
@@ -85,6 +72,6 @@ const mapStateToProps = state => {
     budgets: state.getIn(['budget', 'data'])
   };
 };
-export default connect(mapStateToProps, { createBudget, updateBudget })(
+export default withAuth(connect(mapStateToProps, { createBudget, updateBudget })(
   reduxForm({ form: 'budget' })(BudgetContainer)
-);
+));
