@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import PaddedModelContainer from './../padded_model_container';
 import ModelItem from './../model_item';
 
-const Accounts = ({ accounts, accountDeleteHandler, RenderMessage }) => (
+import Warning from './../warning'
+
+const Accounts = ({ accounts, accountDeleteHandler, RenderMessage }) =>
   <PaddedModelContainer>
     <RenderMessage/>
     {accounts.map(account => (
@@ -21,7 +23,7 @@ const Accounts = ({ accounts, accountDeleteHandler, RenderMessage }) => (
       />
     ))}
   </PaddedModelContainer>
-);
+
 
 Accounts.propTypes = {
   accounts: PropTypes.arrayOf(

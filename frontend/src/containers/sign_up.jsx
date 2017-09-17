@@ -17,6 +17,7 @@ class SignUpContainer extends PureComponent {
 
   _handleSignUp(formProps) {
     this.props.signUp({
+      userName: formProps.get('userName'),
       email: formProps.get('email'),
       password: formProps.get('password')
     });

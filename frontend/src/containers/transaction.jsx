@@ -14,7 +14,6 @@ import {
 import { getAccounts } from './../store/action_creators/account';
 import { getGroupings } from './../store/action_creators/grouping';
 import { getBudgets } from './../store/action_creators/budget';
-import withAuth from './with_auth';
 import Transaction from './../components/transaction/transaction';
 
 class TransactionContainer extends React.PureComponent {
@@ -128,7 +127,7 @@ TransactionContainer.propTypes = {
   updateTransaction: PropTypes.func
 };
 
-export default withAuth(
+export default (
   connect(mapStateToProps, {
     createTransaction,
     updateTransaction,

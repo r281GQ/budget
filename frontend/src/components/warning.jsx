@@ -3,14 +3,20 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message } from 'semantic-ui-react';
 
+const Styled = styled.div`
+  display: flex;
+  height: 90vh;
+  justify-content: space-around;
+  align-items: center;
+`;
+
 const Warning = ({ header, text }) => (
-  <Message warning style={{ flexGrow: 1 }}>
-    <Message.Header>
-      You must create an account and a grouping before you can create a
-      transaction!
-    </Message.Header>
-    <p>Go the the account or grouping page to do that</p>
-  </Message>
+  <Styled>sdf
+    <Message warning style={{ flexGrow: 1 }}>
+      <Message.Header>{header}</Message.Header>
+       <p>{text}</p>
+    </Message>
+  </Styled>
 );
 
 Warning.propTypes = {
