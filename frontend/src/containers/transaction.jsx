@@ -5,15 +5,12 @@ import { connect } from 'react-redux';
 import { reduxForm, SubmissionError } from 'redux-form/immutable';
 import { Map } from 'immutable';
 
-import Message from './message';
 
-import {
-  createTransaction,
-  updateTransaction
-} from './../store/action_creators/transaction';
+import { createTransaction, updateTransaction } from './../store/action_creators/transaction';
 import { getAccounts } from './../store/action_creators/account';
 import { getGroupings } from './../store/action_creators/grouping';
 import { getBudgets } from './../store/action_creators/budget';
+import Message from './message';
 import Transaction from './../components/transaction/transaction';
 
 class TransactionContainer extends React.PureComponent {
@@ -65,7 +62,7 @@ class TransactionContainer extends React.PureComponent {
     this.props.createTransaction({
       ...formProps.toJS(),
       budget:
-        formProps.get('budget') === 0 ? undefined : formProps.get('budget')
+      formProps.get('budget') === 0 ? undefined : formProps.get('budget')
     });
   }
 
@@ -84,7 +81,7 @@ class TransactionContainer extends React.PureComponent {
       _id: this.props.match.params.id,
       ...formProps.toJS(),
       budget:
-        formProps.get('budget') === 0 ? undefined : formProps.get('budget')
+      formProps.get('budget') === 0 ? undefined : formProps.get('budget')
     });
   }
 
@@ -123,8 +120,8 @@ TransactionContainer.propTypes = {
   getAccounts: PropTypes.func.isRequired,
   getGroupings: PropTypes.func.isRequired,
   getBudgets: PropTypes.func.isRequired,
-  createTransaction: PropTypes.func,
-  updateTransaction: PropTypes.func
+  createTransaction: PropTypes.func.isRequired,
+  updateTransaction: PropTypes.func.isRequired
 };
 
 export default (

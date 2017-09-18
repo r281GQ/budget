@@ -21,13 +21,13 @@ const MessageContainer = ({
       <Message.Header>{message}</Message.Header>
     </Message>
   ) : (
-    <Message
-      positive
-      onDismiss={autoClose ? setTimeout(closeMessage, duration) : closeMessage}
-    >
-      <Message.Header>{message}</Message.Header>
-    </Message>
-  ) : null;
+      <Message
+        positive
+        onDismiss={autoClose ? setTimeout(closeMessage, duration) : closeMessage}
+      >
+        <Message.Header>{message}</Message.Header>
+      </Message>
+    ) : null;
 
 MessageContainer.propTypes = {
   message: PropTypes.string,

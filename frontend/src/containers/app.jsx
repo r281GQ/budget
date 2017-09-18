@@ -11,14 +11,12 @@ import Header from './header';
 import Login from './login';
 import SignUp from './sign_up';
 
+import withTypeContainer from './model_container';
 import authAware from './auth_aware';
-
 import { getAccounts } from './../store/action_creators/account';
 import { getGroupings } from './../store/action_creators/grouping';
 import { getBudgets } from './../store/action_creators/budget';
 import { whoAmI } from './../store/action_creators/who_am_i';
-
-import withTypeContainer from './model_container';
 
 class App extends PureComponent {
   componentDidMount() {
@@ -45,10 +43,7 @@ class App extends PureComponent {
 
         <Route path="/accounts" component={withTypeContainer('account')} />
         <Route path="/transaction/:id" component={Transaction} />
-        <Route
-          path="/transactions"
-          component={withTypeContainer('transaction')}
-        />
+        <Route path="/transactions" component={withTypeContainer('transaction')} />
         <Route path="/account/:id" component={Account} />
         <Route path="/groupings" component={withTypeContainer('grouping')} />
         <Route path="/grouping/:id" component={Grouping} />

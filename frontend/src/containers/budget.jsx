@@ -7,10 +7,9 @@ import { reduxForm } from 'redux-form/immutable';
 import { Map } from 'immutable';
 
 import Message from './message';
+import Budget from './../components/budget/budget';
 import withAuth from './with_auth'
 import { createBudget, updateBudget } from './../store/action_creators/budget';
-
-import Budget from './../components/budget/budget';
 
 class BudgetContainer extends PureComponent {
   constructor(props) {
@@ -62,7 +61,15 @@ class BudgetContainer extends PureComponent {
 BudgetContainer.propTypes = {
   budgets: ImmutablePropTypes.mapContains({
     _id: PropTypes.string,
-    name: PropTypes.string
+    name: PropTypes.string,
+    defaultAllowance: PropTypes.number,
+    budgetPeriods: ImmutablePropTypes.mapContains({
+      _id: PropTypes.string,
+      allowance: PropTypes.number,
+      monthlyBalance: PropTypes.number,
+      comulativeBalance: PropTypes.number,
+      month: PropTypes.string
+    })
   }),
   updateBudget: PropTypes.func.isRequired,
   createBudget: PropTypes.func.isRequired

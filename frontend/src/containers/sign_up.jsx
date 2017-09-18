@@ -4,10 +4,10 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form/immutable';
 import { Redirect } from 'react-router-dom';
-import { signUp } from './../store/action_creators/auth';
 
 import SignUp from './../components/sign_up/sign_up';
 import Message from './message';
+import { signUp } from './../store/action_creators/auth';
 
 class SignUpContainer extends PureComponent {
   constructor(props) {
@@ -27,12 +27,12 @@ class SignUpContainer extends PureComponent {
     return this.props.isAuthenticated ? (
       <Redirect to="/transactions" />
     ) : (
-      <SignUp
-        {...this.props}
-        RenderMessage={Message}
-        handleFormSubmit={this.props.handleSubmit(this._handleSignUp)}
-      />
-    );
+        <SignUp
+          {...this.props}
+          RenderMessage={Message}
+          handleFormSubmit={this.props.handleSubmit(this._handleSignUp)}
+        />
+      );
   }
 }
 
@@ -54,13 +54,8 @@ export default connect(mapStateToProps, { signUp })(
       new Promise(resolve =>
         axios
           .get(
-            `/api/auth/unique/${values.get('email')
-              ? values.get('email')
-              : 'email'}`,
-            {
-              withCredentials: true
-            }
-          )
+          `/api/auth/unique/${values.get('email')}`,
+          { withCredentials: true })
           .then(({ data: { result } }) =>
             resolve(result ? undefined : { email: 'Email is already taken!' })
           )

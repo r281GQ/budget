@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form/immutable';
 import { Redirect } from 'react-router-dom';
+
 import Message from './message';
-import { logIn } from './../store/action_creators/auth';
 import Login from './../components/login/login';
+import { logIn } from './../store/action_creators/auth';
 
 class LoginContainer extends PureComponent {
   constructor(props) {
@@ -24,12 +25,12 @@ class LoginContainer extends PureComponent {
     return this.props.isAuthenticated ? (
       <Redirect to="/transactions" />
     ) : (
-      <Login
-        {...this.props}
-        RenderMessage = {Message}
-        handleFormSubmit={this.props.handleSubmit(this._handleLogin)}
-      />
-    );
+        <Login
+          {...this.props}
+          RenderMessage={Message}
+          handleFormSubmit={this.props.handleSubmit(this._handleLogin)}
+        />
+      );
   }
 }
 
