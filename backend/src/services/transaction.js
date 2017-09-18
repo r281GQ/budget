@@ -2,6 +2,7 @@ const _ = require('lodash');
 const mongoose = require('mongoose');
 const extractUser = require('./../utils/extract_user');
 const idValidator = require('./../utils/id_validator');
+const moment = require('moment');
 
 const {
   ID_INVALID_OR_NOT_PRESENT,
@@ -25,14 +26,52 @@ const Account = mongoose.model('Account');
 const Budget = mongoose.model('Budget');
 const Equity = mongoose.model('Equity');
 
-const handleGetAllTransactions = (request, response) =>
+const handleGetAllTransactions = request =>
   new Promise((resolve, reject) => {
-    Transaction.find({ user: extractUser(request) })
+    let take = undefined;
+    const {
+      date,
+      last,
+      grouping,
+      account,
+      budget,
+      name,
+      bigger,
+      lesser
+    } = request.query;
+    let query = { user: extractUser(request) };
+    if (account && idValidator(account)) query.account = account;
+    if (
+      date &&
+      moment(date)
+        .format('MM-YYYY', true)
+        .isValid()
+    )
+      query.date = {
+        $gte: moment(date)
+          .startOf('month')
+          .valueOf(),
+        $lt: moment(date)
+          .endOf('month')
+          .valueOf()
+      };
+
+    if (grouping && idValidator(grouping)) query.grouping = grouping;
+    if (budget && idValidator(budget)) query.budget = budget;
+    if (name) query.name = name;
+    if (last && Number.parseInt(last) > 0) take = Number.parseInt(last);
+
+    const queryWrapper = (query, take) =>
+      !take ? Transaction.find(query) : Transaction.find(query).limit(take);
+    
+    queryWrapper(query, take)
       .populate('account grouping equity budget')
       .sort({ date: 1 })
       .then(transactions => resolve(transactions))
       .catch(error => reject({ error: SERVER_ERROR }));
   });
+
+const handleGetDate = request => Transaction.dates(extractUser(request));
 
 const handlePutTransaction = (request, response) => {
   return new Promise((resolve, reject) => {
@@ -390,6 +429,7 @@ const handleDeleteTransaction = (request, response) =>
 module.exports = {
   handleDeleteTransaction,
   handlePutTransaction,
+  handleGetDate,
   handlePostTransaction,
   handleGetAllTransactions
 };

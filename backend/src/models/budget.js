@@ -134,6 +134,7 @@ module.exports = mongoose => {
         .then(transactions => {
           let array = _.map(bps, bp =>
             _.extend({}, _.pick(bp, ['_id', 'allowance', 'month']), {
+              // TODO: performance issue n5 time could be reduced to n2
               monthlyBalance:
                 _.reduce(
                   _.map(

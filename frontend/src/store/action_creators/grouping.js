@@ -18,9 +18,10 @@ export const createGrouping = grouping => dispatch => {
     })
     .catch(
       error =>
-        error.response.status === 401
-          ? dispatch({ type: 'LOG_OUT' })
-          : dispatch(
+        // error.response.status === 401
+        //   ? dispatch({ type: 'LOG_OUT' })
+          // :
+           dispatch(
               stopSubmit('grouping', { _error: error.response.data.error })
             )
     );

@@ -49,18 +49,14 @@ module.exports = mongoose => {
           );
           resolve(total);
         })
-        .catch(error => {
-          reject(error);
-        });
+        .catch(error => reject(error));
     });
   };
 
   AccountSchema.pre('remove', function(next) {
     const Transaction = mongoose.model('Transaction');
     Transaction.remove({ account: this._id })
-      .then(() => {
-        next();
-      })
+      .then(() => next())
       .catch(error => next(error));
   });
 

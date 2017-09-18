@@ -15,12 +15,18 @@ module.exports = app => {
     handleDeleteTransaction,
     handlePutTransaction,
     handlePostTransaction,
-    handleGetAllTransactions
+    handleGetAllTransactions,
+    handleGetDate
   } = require('./../services/transaction');
 
   router.use(authMiddleWare);
 
   app.use(`/api/transaction`, router);
+
+  router.get('/dates', (request, response) => {
+    handleGetDate(request)
+      .then(dates => response.status(200).send(dates))
+  })
 
   router.post('/', (request, response) => {
     handlePostTransaction(request)

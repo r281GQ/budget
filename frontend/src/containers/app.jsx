@@ -30,7 +30,6 @@ class App extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.isAuthenticated && !this.props.isAuthenticated) {
-      this.props.whoAmI();
       this.props.getAccounts();
       this.props.getGroupings();
       this.props.getBudgets();
@@ -68,6 +67,6 @@ App.propTypes = {
   isAuthenticated: PropTypes.bool
 };
 
-export default authAware(connect(null, { getAccounts, getGroupings, getBudgets, whoAmI })(
-  App
-));
+export default authAware(
+  connect(null, { getAccounts, getGroupings, getBudgets, whoAmI })(App)
+);

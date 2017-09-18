@@ -13,10 +13,11 @@ const Transactions = ({
   accounts,
   groupings,
   budgets,
-  RenderMessage
+  RenderMessage,
+  handleFormSubmit
 }) => (
   <div>
-    <Filter accounts={accounts} groupings={groupings} budgets={budgets} />
+    <Filter accounts={accounts} groupings={groupings} budgets={budgets} handleFormSubmit = {handleFormSubmit}/>
     <Padded>
       <Grid stackable>
         <Grid.Row columns={1}>
@@ -65,7 +66,8 @@ Transactions.propTypes = {
   groupings: PropTypes.any,
   budgets: PropTypes.any,
   RenderMessage: PropTypes.any,
-  transactionDeleteHandler: PropTypes.func
+  transactionDeleteHandler: PropTypes.func,
+  handleFormSubmit: PropTypes.func
 };
 
 export default Transactions;

@@ -1,14 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Menu, Dropdown } from 'semantic-ui-react';
+import {Field} from 'redux-form/immutable'
+import ReduxFormCompatibleDropDown from './../form_elements/redux_form_compatible_drop_down'
+
+
 
 const FilterItem = ({ collection, type }) => (
   <Menu.Item>
-    <Dropdown
-      fluid
-      defaultValue={0}
+    <Field
       placeholder={`Filter by ${type}`}
-      selection
+      disabled={false}
+      name={type}
+      
+      component={ReduxFormCompatibleDropDown}
       options={collection.concat({ name: `All ${type}`, _id: 0 }).map(item => ({
         key: item._id,
         text: item.name,

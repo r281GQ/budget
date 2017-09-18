@@ -161,5 +161,19 @@ module.exports = mongoose => {
       });
   });
 
+  transactionSchema.statics.dates = function(user) {
+    return new Promise((resolve, reject) => {
+      this.find({ user })
+        .then(transactions =>
+          transactions.reduce((sum, transaction) => {
+            const currentDate = moment(transaction.date).format('MM-YYYY');
+            if (!sum[currentDate]) sum[currentDate] = currentDate;
+            return sum;
+          }, {})
+        )
+        .then(dates => resolve(dates));
+    });
+  };
+
   mongoose.model('Transaction', transactionSchema);
 };

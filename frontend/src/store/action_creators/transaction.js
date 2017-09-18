@@ -68,11 +68,19 @@ export const deleteTransaction = _id => dispatch => {
     });
 };
 
-export const getTransactions = () => dispatch => {
+export const getTransactions = queries => dispatch => {
   request
-    .get('/api/transaction')
+    .get('/api/transaction', { params: queries })
     .then(({ data }) =>
       dispatch({ type: transactions.WRITE_TRANSACTIONS, payload: data })
+      // dispatch(getDates())
     )
+    .catch(() => undefined);
+};
+
+export const getDates = () => dispatch => {
+  request
+    .get('/api/transaction/dates')
+    .then(({ data }) => console.log(data))
     .catch(() => undefined);
 };

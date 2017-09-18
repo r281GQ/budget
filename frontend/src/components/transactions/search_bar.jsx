@@ -1,10 +1,16 @@
 import React from 'react';
-
+import {Field} from 'redux-form/immutable'
 import { Menu, Input } from 'semantic-ui-react';
 
 const SearchBar = () => (
   <Menu.Item>
-      <Input icon='search' placeholder='Search...' />
+    <Field
+      name = "name"
+      placeholder='Search...'
+      disabled={false}
+      icon = 'search'
+      component={Input}
+    />
   </Menu.Item>
 );
 
