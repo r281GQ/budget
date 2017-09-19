@@ -11,7 +11,7 @@ const Styled = styled.div`
 `;
 
 const Warning = ({ header, text }) => (
-  <Styled>sdf
+  <Styled>
     <Message warning style={{ flexGrow: 1 }}>
       <Message.Header>{header}</Message.Header>
        <p>{text}</p>

@@ -2,7 +2,9 @@ module.exports = mongoose => {
   const _ = require('lodash');
   const moment = require('moment');
 
-  const { currencyValidator } = require('./../services/validators');
+  const {
+    currencyValidator
+  } = require('./../services/validators');
 
   const Schema = mongoose.Schema;
 
@@ -45,9 +47,9 @@ module.exports = mongoose => {
   const calculateSum = (extendedBudgetPeriods, bp) => {
     let budgetPeriodFromLastIteration = _.last(extendedBudgetPeriods);
 
-    let comulativeBalance = !budgetPeriodFromLastIteration
-      ? 0
-      : budgetPeriodFromLastIteration.comulativeBalance;
+    let comulativeBalance = !budgetPeriodFromLastIteration ?
+      0 :
+      budgetPeriodFromLastIteration.comulativeBalance;
 
     extendedBudgetPeriods.push(
       _.extend({}, bp, {
@@ -58,10 +60,10 @@ module.exports = mongoose => {
     return extendedBudgetPeriods;
   };
 
-  budgetSchema.methods.createInitialBudgetPeriods = function(startingMonth) {
+  budgetSchema.methods.createInitialBudgetPeriods = function (startingMonth) {
     return new Promise((resolve, reject) => {
-      let now = moment().valueOf();
-      let monthsToCreate = [];
+      const now = moment().valueOf();
+      const monthsToCreate = [];
 
       if (startingMonth)
         while (!moment(startingMonth).isSame(now, 'month')) {
@@ -71,19 +73,18 @@ module.exports = mongoose => {
 
       monthsToCreate.push(now);
 
-      let budgetPeriods = monthsToCreate.map(month => ({
+      this.budgetPeriods = monthsToCreate.map(month => ({
         month,
         allowance: this.defaultAllowance
       }));
 
-      this.budgetPeriods = budgetPeriods;
       this.save()
         .then(budget => resolve(budget))
         .catch(error => reject(error));
     });
   };
 
-  budgetSchema.methods.assignBudgetPeriod = function(month) {
+  budgetSchema.methods.assignBudgetPeriod = function (month) {
     return new Promise((resolve, reject) => {
       if (!month) reject();
 
@@ -96,11 +97,9 @@ module.exports = mongoose => {
       let firstPeriod = _.first(_.sortBy(this.budgetPeriods, ['month']));
       let lastPeriod = _.last(_.sortBy(this.budgetPeriods, ['month']));
 
-      if (
-        !_.find(this.budgetPeriods, bp =>
+      if (!_.find(this.budgetPeriods, bp =>
           moment(bp.month).isSame(moment(month), 'M')
-        )
-      ) {
+        )) {
         if (moment(month).isBefore(firstPeriod.month, 'month')) {
           while (!moment(month).isSame(firstPeriod.month, 'month')) {
             this.budgetPeriods.push({
@@ -125,18 +124,18 @@ module.exports = mongoose => {
     });
   };
 
-  budgetSchema.methods.balances = function() {
-    let Transaction = mongoose.model('Transaction');
-    let budget = this;
-    let bps = budget.budgetPeriods;
+  budgetSchema.methods.balances = function () {
+    const Transaction = mongoose.model('Transaction');
+    const budget = this;
+    const bps = budget.budgetPeriods;
     return new Promise((resolve, reject) => {
-      Transaction.find({ budget })
+      Transaction.find({
+          budget
+        })
         .then(transactions => {
-          let array = _.map(bps, bp =>
+          const array = _.map(bps, bp =>
             _.extend({}, _.pick(bp, ['_id', 'allowance', 'month']), {
-              // TODO: performance issue n5 time could be reduced to n2
-              monthlyBalance:
-                _.reduce(
+              monthlyBalance: _.reduce(
                   _.map(
                     _.filter(budget.budgetPeriods, bpToFilter =>
                       moment(bpToFilter.month).isSame(
@@ -161,22 +160,25 @@ module.exports = mongoose => {
                 )
             })
           );
-          let calculatedArray = _.reduce(
+          const calculatedArray = _.reduce(
             _.sortBy(array, ['month']),
-            calculateSum,
-            []
+            calculateSum, []
           );
           resolve(_.keyBy(calculatedArray, '_id'));
         })
-        .catch(error => {
-          reject(error);
-        });
+        .catch(error => reject(error));
     });
   };
 
-  budgetSchema.pre('remove', function(next) {
-    let Transaction = mongoose.model('Transaction');
-    Transaction.update({ budget: this }, { $unset: { budget: 1 } })
+  budgetSchema.pre('remove', function (next) {
+    const Transaction = mongoose.model('Transaction');
+    Transaction.update({
+        budget: this
+      }, {
+        $unset: {
+          budget: 1
+        }
+      })
       .then(() => next())
       .catch(error => next(error));
   });

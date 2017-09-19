@@ -13,7 +13,7 @@ const InitialBalance = ({ disabled }) => (
     min={0}
     step={0.01}
     component={ReduxFormCompatibleInput}
-    validate={value => (value >= 0 ? undefined : 'Number must be above 0!')}
+    validate={value => value >= 0 ? undefined : 'Number must be above 0!'}
   />
 );
 

@@ -8,7 +8,7 @@ import Warning from './../warning'
 
 const Accounts = ({ accounts, accountDeleteHandler, RenderMessage }) =>
   <PaddedModelContainer>
-    <RenderMessage/>
+    <RenderMessage />
     {accounts.map(account => (
       <ModelItem
         modelType="account"

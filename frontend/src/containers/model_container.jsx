@@ -7,6 +7,7 @@ import Message from './message';
 import Accounts from './../components/accounts/accounts';
 import Groupings from './../components/groupings/groupings';
 import Budgets from './../components/budgets/budgets';
+import Warning from './../components/warning';
 import Transactions from './transactions';
 
 import withAuth from './with_auth';
@@ -32,6 +33,7 @@ const fetchers = {
 /*eslint react/display-name: off*/
 /*eslint react/prop-types: off*/
 const withUI = type => props => {
+  if (props.collection.length === 0) return <Warning header={`You don't have any ${type}s yet!`} />
   switch (type) {
     case 'account':
       return (

@@ -28,9 +28,9 @@ export const createGrouping = grouping => dispatch => {
       );
       dispatch(messageActions.openMessage());
     })
-    .catch(autoLogout(dispatch, error => stopSubmit('grouping', {
+    .catch(error => dispatch(autoLogout(error, stopSubmit('grouping', {
       _error: error.response.data.error
-    })));
+    }))));
 };
 
 export const getGroupings = () => dispatch => {

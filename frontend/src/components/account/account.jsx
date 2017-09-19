@@ -9,7 +9,7 @@ import InitialBalance from './initial_balance';
 
 const Account = ({ handleFormSubmit, editForm, invalid, dirty, RenderMessage }) => (
   <ModelForm
-    RenderMessage = {RenderMessage}
+    RenderMessage={RenderMessage}
     name="Account"
     icon="currency"
     handleFormSubmit={handleFormSubmit}
@@ -37,7 +37,7 @@ Account.propTypes = {
   handleFormSubmit: PropTypes.func.isRequired,
   editForm: PropTypes.bool.isRequired,
   dirty: PropTypes.bool.isRequired,
-  RenderMessage: PropTypes.any
+  RenderMessage: PropTypes.element
 };
 
 export default Account;

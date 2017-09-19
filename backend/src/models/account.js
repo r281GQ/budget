@@ -1,6 +1,4 @@
 module.exports = mongoose => {
-  // const _ = require('lodash');
-
   const { currencyValidator } = require('./../services/validators');
 
   const Schema = mongoose.Schema;
@@ -12,7 +10,8 @@ module.exports = mongoose => {
     },
     initialBalance: {
       type: Number,
-      required: true
+      required: true,
+      min: 0
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

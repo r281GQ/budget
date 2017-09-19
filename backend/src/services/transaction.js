@@ -29,6 +29,7 @@ const Equity = mongoose.model('Equity');
 const handleGetAllTransactions = request =>
   new Promise((resolve, reject) => {
     let take = undefined;
+
     const {
       date,
       last,
@@ -39,13 +40,17 @@ const handleGetAllTransactions = request =>
       bigger,
       lesser
     } = request.query;
-    let query = { user: extractUser(request) };
+
+    const query = {
+      user: extractUser(request)
+    };
+
     if (account && idValidator(account)) query.account = account;
     if (
       date &&
       moment(date)
-        .format('MM-YYYY', true)
-        .isValid()
+      .format('MM-YYYY', true)
+      .isValid()
     )
       query.date = {
         $gte: moment(date)
@@ -63,12 +68,16 @@ const handleGetAllTransactions = request =>
 
     const queryWrapper = (query, take) =>
       !take ? Transaction.find(query) : Transaction.find(query).limit(take);
-    
+
     queryWrapper(query, take)
       .populate('account grouping equity budget')
-      .sort({ date: 1 })
+      .sort({
+        date: 1
+      })
       .then(transactions => resolve(transactions))
-      .catch(error => reject({ error: SERVER_ERROR }));
+      .catch(error => reject({
+        error: SERVER_ERROR
+      }));
   });
 
 const handleGetDate = request => Transaction.dates(extractUser(request));
@@ -87,14 +96,15 @@ const handlePutTransaction = (request, response) => {
       currency
     } = request.body;
 
-    if (
-      !idValidator(_id) ||
+    if (!idValidator(_id) ||
       !idValidator(grouping) ||
       !idValidator(account) ||
       (budget && !idValidator(budget)) ||
       (equity && !idValidator(equity))
     )
-      return reject({ error: ID_INVALID_OR_NOT_PRESENT });
+      return reject({
+        error: ID_INVALID_OR_NOT_PRESENT
+      });
 
     let newTransaction = {
       _id,
@@ -110,16 +120,27 @@ const handlePutTransaction = (request, response) => {
     let transaction, new_account, new_grouping, date;
 
     Promise.all([
-      Transaction.findOne({ _id, user }).populate('account grouping'),
-      Account.findOne({ _id: account, user }),
-      Grouping.findOne({ _id: grouping, user })
-    ])
+        Transaction.findOne({
+          _id,
+          user
+        }).populate('account grouping'),
+        Account.findOne({
+          _id: account,
+          user
+        }),
+        Grouping.findOne({
+          _id: grouping,
+          user
+        })
+      ])
       .then(queries => {
         transaction = queries[0];
         new_account = queries[1];
         grouping = new_grouping = queries[2];
         if (!transaction || !new_account || !new_grouping)
-          return Promise.reject({ message: RESOURCE_NOT_FOUND });
+          return Promise.reject({
+            message: RESOURCE_NOT_FOUND
+          });
         date = transaction.date;
         return Promise.all([
           new_account.currentBalance(),
@@ -146,14 +167,22 @@ const handlePutTransaction = (request, response) => {
         let oldAmount = transaction.amount;
 
         if (areAccountstheSame && areGroupingsstheSame && isNewGroupingIncome)
-          return oldBalance - (oldAmount - newAmount) > 0
-            ? Transaction.remove({ _id })
-            : Promise.reject({ message: ACCOUNT_BALANCE });
+          return oldBalance - (oldAmount - newAmount) > 0 ?
+            Transaction.remove({
+              _id
+            }) :
+            Promise.reject({
+              message: ACCOUNT_BALANCE
+            });
 
         if (areAccountstheSame && areGroupingsstheSame && !isNewGroupingIncome)
-          return oldBalance - (newAmount - oldAmount) >= 0
-            ? Transaction.remove({ _id })
-            : Promise.reject({ message: ACCOUNT_BALANCE });
+          return oldBalance - (newAmount - oldAmount) >= 0 ?
+            Transaction.remove({
+              _id
+            }) :
+            Promise.reject({
+              message: ACCOUNT_BALANCE
+            });
 
         if (
           areAccountstheSame &&
@@ -161,9 +190,13 @@ const handlePutTransaction = (request, response) => {
           isOldGroupingIncome &&
           !isNewGroupingIncome
         )
-          return oldBalance - (newAmount + oldAmount) > 0
-            ? Transaction.remove({ _id })
-            : Promise.reject({ message: ACCOUNT_BALANCE });
+          return oldBalance - (newAmount + oldAmount) > 0 ?
+            Transaction.remove({
+              _id
+            }) :
+            Promise.reject({
+              message: ACCOUNT_BALANCE
+            });
 
         if (
           areAccountstheSame &&
@@ -171,35 +204,49 @@ const handlePutTransaction = (request, response) => {
           !isOldGroupingIncome &&
           isNewGroupingIncome
         )
-          return Transaction.remove({ _id });
+          return Transaction.remove({
+            _id
+          });
 
         if (!areAccountstheSame && areGroupingsstheSame && isOldGroupingIncome)
-          return oldBalance - oldAmount > 0
-            ? Transaction.remove({ _id })
-            : Promise.reject({ message: ACCOUNT_BALANCE });
+          return oldBalance - oldAmount > 0 ?
+            Transaction.remove({
+              _id
+            }) :
+            Promise.reject({
+              message: ACCOUNT_BALANCE
+            });
 
         if (!areAccountstheSame && areGroupingsstheSame && !isOldGroupingIncome)
-          return newBalance - newAmount >= 0
-            ? Transaction.remove({ _id })
-            : Promise.reject({ message: ACCOUNT_BALANCE });
+          return newBalance - newAmount >= 0 ?
+            Transaction.remove({
+              _id
+            }) :
+            Promise.reject({
+              message: ACCOUNT_BALANCE
+            });
 
-        if (
-          !areAccountstheSame &&
+        if (!areAccountstheSame &&
           !areGroupingsstheSame &&
           !isOldGroupingIncome &&
           isNewGroupingIncome
         )
-          return Transaction.remove({ _id });
+          return Transaction.remove({
+            _id
+          });
 
-        if (
-          !areAccountstheSame &&
+        if (!areAccountstheSame &&
           !areGroupingsstheSame &&
           isOldGroupingIncome &&
           !isNewGroupingIncome
         )
-          return newBalance - newAmount >= 0 && oldBalance - oldAmount >= 0
-            ? Transaction.remove({ _id })
-            : Promise.reject({ message: ACCOUNT_BALANCE });
+          return newBalance - newAmount >= 0 && oldBalance - oldAmount >= 0 ?
+            Transaction.remove({
+              _id
+            }) :
+            Promise.reject({
+              message: ACCOUNT_BALANCE
+            });
       })
       .then(() => {
         let toCreate = new Transaction({
@@ -219,7 +266,10 @@ const handlePutTransaction = (request, response) => {
         return toCreate.save();
       })
       .then(updatedTransaction =>
-        Transaction.findOne({ _id, user }).populate('account grouping')
+        Transaction.findOne({
+          _id,
+          user
+        }).populate('account grouping')
       )
       .then(updatedTransaction => {
         const toSend = _.pick(updatedTransaction, [
@@ -238,45 +288,59 @@ const handlePutTransaction = (request, response) => {
       })
       .then(
         transaction =>
-          !transaction.budget
-            ? resolve(transaction)
-            : prepareDetailedBudget(transaction, user)
+        !transaction.budget ?
+        resolve(transaction) :
+        prepareDetailedBudget(transaction, user)
       )
       .then(transaction => resolve(transaction))
       .catch(error => {
         switch (error.message) {
           case ACCOUNT_BALANCE:
-            return reject({ error: ACCOUNT_BALANCE });
+            return reject({
+              error: ACCOUNT_BALANCE
+            });
           case DEPENDENCIES_NOT_MET:
-            return reject({ error: DEPENDENCIES_NOT_MET });
+            return reject({
+              error: DEPENDENCIES_NOT_MET
+            });
           case BUDGET_INCOME_CONFLICT:
-            return reject({ error: BUDGET_INCOME_CONFLICT });
+            return reject({
+              error: BUDGET_INCOME_CONFLICT
+            });
           case RESOURCE_NOT_FOUND:
-            return reject({ error: RESOURCE_NOT_FOUND });
+            return reject({
+              error: RESOURCE_NOT_FOUND
+            });
           default:
-            return reject({ error: SERVER_ERROR });
+            return reject({
+              error: SERVER_ERROR
+            });
         }
       });
   });
 };
 
 const prepareDetailedBudget = (transactionToSend, user) =>
-  new Promise((resolve, reject) => {
-    let intermediate;
-    Budget.findOne({ _id: transactionToSend.budget, user }).then(budget => {
-      intermediate = budget;
+  new Promise((resolve, reject) =>
+    Budget.findOne({
+      _id: transactionToSend.budget,
+      user
+    }).then(budget =>
       budget.balances().then(balances => {
         budget = pickPropertiesForBudget(budget);
         budget.budgetPeriods = balances;
         transactionToSend.budget = budget;
         return resolve(transactionToSend);
-      });
-    });
-  });
+      })
+    )
+  );
 
 const prepareDetailedAccount = (transactionToSend, user) =>
   new Promise((resolve, reject) =>
-    Account.findOne({ _id: transactionToSend.account, user }).then(account =>
+    Account.findOne({
+      _id: transactionToSend.account,
+      user
+    }).then(account =>
       account.currentBalance().then(currentBalance => {
         const reducedAccount = pickPropertiesForAccount(account);
 
@@ -316,19 +380,25 @@ const handlePostTransaction = (request, response) => {
     if (budget) transaction.budget = budget;
     if (equity) transaction.equity = equity;
 
-    if (
-      !idValidator(grouping) ||
+    if (!idValidator(grouping) ||
       !idValidator(account) ||
       (budget && !idValidator(budget)) ||
       (equity && !idValidator(equity))
     )
-      return reject({ message: ID_INVALID_OR_NOT_PRESENT });
+      return reject({
+        message: ID_INVALID_OR_NOT_PRESENT
+      });
     let transactionToSend;
     let intermediate;
     transaction
       .save()
-      .then(({ _id }) =>
-        Transaction.findOne({ _id, user }).populate('account grouping budget')
+      .then(({
+          _id
+        }) =>
+        Transaction.findOne({
+          _id,
+          user
+        }).populate('account grouping budget')
       )
       .then(transaction => {
         const toSend = _.pick(transaction, [
@@ -350,24 +420,34 @@ const handlePostTransaction = (request, response) => {
       })
       .then(
         transaction =>
-          !transaction.budget
-            ? transaction
-            : prepareDetailedBudget(transaction, user)
+        !transaction.budget ?
+        transaction :
+        prepareDetailedBudget(transaction, user)
       )
       .then(transaction => resolve(transaction))
       .catch(error => {
         console.log(error);
         switch (error.message) {
           case ACCOUNT_BALANCE:
-            return reject({ error: ACCOUNT_BALANCE });
+            return reject({
+              error: ACCOUNT_BALANCE
+            });
           case DEPENDENCIES_NOT_MET:
-            return reject({ error: DEPENDENCIES_NOT_MET });
+            return reject({
+              error: DEPENDENCIES_NOT_MET
+            });
           case BUDGET_INCOME_CONFLICT:
-            return reject({ error: BUDGET_INCOME_CONFLICT });
+            return reject({
+              error: BUDGET_INCOME_CONFLICT
+            });
           case RESOURCE_NOT_FOUND:
-            return reject({ error: RESOURCE_NOT_FOUND });
+            return reject({
+              error: RESOURCE_NOT_FOUND
+            });
           default:
-            return reject({ error: SERVER_ERROR });
+            return reject({
+              error: SERVER_ERROR
+            });
         }
       });
   });
@@ -375,18 +455,22 @@ const handlePostTransaction = (request, response) => {
 
 const handleDeleteTransaction = (request, response) =>
   new Promise((resolve, reject) => {
-    if (!idValidator(_id)) return reject({ error: ID_INVALID_OR_NOT_PRESENT });
+    if (!idValidator(_id)) return reject({
+      error: ID_INVALID_OR_NOT_PRESENT
+    });
 
     Transaction.findOne({
-      _id: request.params['_id'],
-      user: extractUser(request)
-    })
+        _id: request.params['_id'],
+        user: extractUser(request)
+      })
       .populate('account budget')
       .then(
         transaction =>
-          !transaction
-            ? Promise.reject({ message: RESOURCE_NOT_FOUND })
-            : transaction.remove()
+        !transaction ?
+        Promise.reject({
+          message: RESOURCE_NOT_FOUND
+        }) :
+        transaction.remove()
       )
       .then(transaction =>
         prepareDetailedAccount(
@@ -407,21 +491,29 @@ const handleDeleteTransaction = (request, response) =>
       )
       .then(
         transaction =>
-          !transaction.budget
-            ? resolve(transaction)
-            : prepareDetailedBudget(transaction, user)
+        !transaction.budget ?
+        resolve(transaction) :
+        prepareDetailedBudget(transaction, user)
       )
       .then(transaction => resolve(transaction))
       .catch(error => {
         switch (error.message) {
           case ACCOUNT_BALANCE:
-            return reject({ message: ACCOUNT_BALANCE });
+            return reject({
+              message: ACCOUNT_BALANCE
+            });
           case RESOURCE_NOT_FOUND:
-            return reject({ message: RESOURCE_NOT_FOUND });
+            return reject({
+              message: RESOURCE_NOT_FOUND
+            });
           case FORBIDDEN_RESOURCE:
-            return reject({ message: FORBIDDEN_RESOURCE });
+            return reject({
+              message: FORBIDDEN_RESOURCE
+            });
           default:
-            return reject({ message: SERVER_ERROR });
+            return reject({
+              message: SERVER_ERROR
+            });
         }
       });
   });
