@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-require('./../../src/models/user')(mongoose);
 require('./../../src/models/account')(mongoose);
 require('./../../src/models/transaction')(mongoose);
 require('./../../src/models/grouping')(mongoose);
@@ -8,90 +7,100 @@ require('./../../src/models/grouping')(mongoose);
 require('./../../src/services/mongoose');
 
 const Account = mongoose.model('Account');
-const User = mongoose.model('User');
 const Transaction = mongoose.model('Transaction');
-const Grouping = mongoose.model('Grouping');
+
+const sinon = require('sinon');
 
 describe('Account model', () => {
-  let user;
-  let grouping;
 
-  beforeAll(done => {
-    const userToSave = new User({
-      userName: 'Endre',
-      email: 'veghendre@gmai.com',
-      password: '23423423'
+  function AccountMock({
+    name,
+    initialBalance
+  }) {
+    this.name = name;
+    this.initialBalance = initialBalance;
+  }
+
+  AccountMock.prototype.currentBalance = Account.prototype.currentBalance;
+  AccountMock.prototype.remove = Account.prototype.remove;
+  AccountMock.prototype.preRemoveHook = Account.prototype._pres.$__original_remove[1];
+
+  beforeEach((done) => {
+    sinon.stub(Transaction, 'find').returns(Transaction);
+    sinon.stub(Transaction, 'remove').resolves({});
+    done();
+  })
+
+  afterEach(done => {
+    if (Transaction.populate.restore) Transaction.populate.restore();
+    Transaction.find.restore();
+    Transaction.remove.restore();
+    done();
+  })
+
+
+  it('Should return initial balance with no transactions persisted yet', () => {
+    const initialBalance = 100;
+
+    sinon.stub(Transaction, 'populate').resolves([]);
+
+    const accountToCreate = new AccountMock({
+      name: 'test',
+      initialBalance
     });
 
-    userToSave
-      .save()
-      .then(savedUser => {
-        user = savedUser;
-        return 0;
-      })
-      .then(() => done())
-      .catch(error => {
-        console.log(error);
-        done(error);
-      });
+    return expect(accountToCreate.currentBalance()).resolves.toBe(initialBalance)
   });
 
-  afterAll(done => {
-    User.findOneAndRemove({ _id: user._id }).then(user => done());
-  });
+  it('Should return initial balance plus transaction if it is an income', () => {
+    const initialBalance = 100;
 
-  describe('CurrentBalance', () => {
-    beforeEach(done => {
-      const groupingToSave = new Grouping({
-        name: 'Income',
+    sinon.stub(Transaction, 'populate').resolves([{
+      grouping: {
         type: 'income'
-      });
-      groupingToSave.user = user;
-      return groupingToSave.save().then(() => done());
+      },
+      amount: 10
+    }]);
+
+    const accountToCreate = new AccountMock({
+      name: 'test',
+      initialBalance
     });
 
-    it('Should return initial balance with no transactions persisted yet', done => {
-      const initialBalance = 100;
+    return expect(accountToCreate.currentBalance()).resolves.toBe(110)
+  });
 
-      const accountToCreate = new Account({
-        name: 'test',
-        initialBalance
-      });
+  it('Should return initial balance minus transaction if it is an expense', () => {
+    const initialBalance = 100;
 
-      accountToCreate.user = user;
+    sinon.stub(Transaction, 'populate').resolves([{
+      grouping: {
+        type: 'expense'
+      },
+      amount: 10
+    }]);
 
-      accountToCreate
-        .save()
-        .then(account => account.currentBalance())
-        .then(currentBalance => {
-          expect(currentBalance).toBe(initialBalance);
-          done();
-        })
-        .catch(err => {
-          done(err);
-        });
+    const accountToCreate = new AccountMock({
+      name: 'test',
+      initialBalance
     });
 
-    it('Should return initial balance with no transactions persisted yet', done => {
-      const initialBalance = 100;
+    return expect(accountToCreate.currentBalance()).resolves.toBe(90)
+  });
 
-      const accountToCreate = new Account({
-        name: 'test',
-        initialBalance
-      });
+  it('Should invoke transaction remove if account is removed in pre hook.', async() => {
+    const initialBalance = 100;
 
-      accountToCreate.user = user;
-
-      accountToCreate
-        .save()
-        .then(account => account.currentBalance())
-        .then(currentBalance => {
-          expect(currentBalance).toBe(initialBalance);
-          done();
-        })
-        .catch(err => {
-          done(err);
-        });
+    const accountToCreate = new AccountMock({
+      name: 'test',
+      initialBalance
     });
+
+    const nextMock = sinon.spy();
+
+    await accountToCreate.preRemoveHook(nextMock);
+
+    expect(Transaction.remove.calledOnce).toBe(true);
+    expect(nextMock.calledOnce).toBe(true);
   });
 });

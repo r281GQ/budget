@@ -31,15 +31,13 @@ module.exports = mongoose => {
   AccountSchema.methods.currentBalance = function() {
     const account = this;
     const Transaction = mongoose.model('Transaction');
-    const Grouping = mongoose.model('Grouping');
+    // const Grouping = mongoose.model('Grouping');
 
     return new Promise((resolve, reject) => {
       Transaction.find({ account: account._id })
         .populate('grouping')
         .then(transactions => {
-          // let total = _.reduce(
           const total = transactions.reduce(
-            // transactions,
             (sum, transaction) =>
               transaction.grouping.type === 'income'
                 ? sum + transaction.amount
