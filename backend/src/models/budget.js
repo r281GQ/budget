@@ -41,7 +41,10 @@ module.exports = mongoose => {
       ref: 'User',
       required: true
     },
-    budgetPeriods: [budgetPeriodSchema]
+    budgetPeriods: [budgetPeriodSchema],
+    createdAt: {
+      type: Date
+    }
   });
 
   const calculateSum = (extendedBudgetPeriods, bp) => {
@@ -60,46 +63,53 @@ module.exports = mongoose => {
     return extendedBudgetPeriods;
   };
 
-  budgetSchema.methods.createInitialBudgetPeriods = function (startingMonth) {
-    return new Promise((resolve, reject) => {
-      const now = moment().valueOf();
-      const monthsToCreate = [];
 
-      if (startingMonth)
-        while (!moment(startingMonth).isSame(now, 'month')) {
-          monthsToCreate.push(startingMonth);
-          startingMonth = moment(startingMonth).add(1, 'M');
-        }
+  //TODO: lodash range
+  // budgetSchema.methods.createInitialBudgetPeriods = function (startingMonth) {
+  //   return new Promise((resolve, reject) => {
+  //     const now = moment().valueOf();
+  //     const monthsToCreate = [];
 
-      monthsToCreate.push(now);
+  //     if (startingMonth)
+  //       while (!moment(startingMonth).isSame(now, 'month')) {
+  //         monthsToCreate.push(startingMonth);
+  //         startingMonth = moment(startingMonth).add(1, 'M');
+  //       }
 
-      this.budgetPeriods = monthsToCreate.map(month => ({
-        month,
-        allowance: this.defaultAllowance
-      }));
+  //     monthsToCreate.push(now);
 
-      this.save()
-        .then(budget => resolve(budget))
-        .catch(error => reject(error));
-    });
-  };
+  //     this.budgetPeriods = monthsToCreate.map(month => ({
+  //       month,
+  //       allowance: this.defaultAllowance
+  //     }));
+
+  //     this.save()
+  //       .then(budget => resolve(budget))
+  //       .catch(error => reject(error));
+  //   });
+  // };
 
   budgetSchema.methods.assignBudgetPeriod = function (month) {
     return new Promise((resolve, reject) => {
-      if (!month) reject();
+      if (!month) reject({message: 'Month required!'});
 
       if (_.isEmpty(this.budgetPeriods))
         this.budgetPeriods.push({
-          month: this._id.getTimestamp(),
+          // month: moment(this._id.getTimestamp()).toDate(),
+          month: moment(this.createdAt),
           allowance: this.defaultAllowance
         });
 
-      let firstPeriod = _.first(_.sortBy(this.budgetPeriods, ['month']));
-      let lastPeriod = _.last(_.sortBy(this.budgetPeriods, ['month']));
+      const sortedBudgetPeriods = _.sortBy(this.budgetPeriods, ['month']);
 
-      if (!_.find(this.budgetPeriods, bp =>
+      const firstPeriod = _.first(sortedBudgetPeriods);
+      const lastPeriod = _.last(sortedBudgetPeriods);
+
+      //if the month doesn't exist  
+      if (!this.budgetPeriods.find(bp =>
           moment(bp.month).isSame(moment(month), 'M')
         )) {
+        //the month is before the earliest month start adding month down
         if (moment(month).isBefore(firstPeriod.month, 'month')) {
           while (!moment(month).isSame(firstPeriod.month, 'month')) {
             this.budgetPeriods.push({
@@ -118,9 +128,10 @@ module.exports = mongoose => {
           }
         }
       }
+
       this.save()
         .then(budget => resolve(budget))
-        .catch(error => reject(error));
+        .catch(error => {console.log(error);reject(error)});
     });
   };
 
