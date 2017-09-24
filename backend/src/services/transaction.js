@@ -455,7 +455,7 @@ const handlePostTransaction = (request, response) => {
 
 const handleDeleteTransaction = (request, response) =>
   new Promise((resolve, reject) => {
-    if (!idValidator(_id)) return reject({
+    if (!idValidator(request.params['_id'])) return reject({
       error: ID_INVALID_OR_NOT_PRESENT
     });
 
@@ -486,7 +486,7 @@ const handleDeleteTransaction = (request, response) =>
             'budget',
             'equity'
           ]),
-          user
+           extractUser(request)
         )
       )
       .then(
@@ -497,6 +497,7 @@ const handleDeleteTransaction = (request, response) =>
       )
       .then(transaction => resolve(transaction))
       .catch(error => {
+        console.log(error);
         switch (error.message) {
           case ACCOUNT_BALANCE:
             return reject({

@@ -76,6 +76,7 @@ module.exports = app => {
     handleDeleteTransaction(request)
       .then(transaction => response.status(200).send(transaction))
       .catch(error => {
+        console.log(error)
         switch (error.message) {
           case ACCOUNT_BALANCE:
             return response.status(400).send({ error: ACCOUNT_BALANCE });

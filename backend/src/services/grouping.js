@@ -79,7 +79,7 @@ const handleDeleteGrouping = request =>
             : grouping.remove()
       )
       .then(grouping => resolve(grouping))
-      .catch(error => resolve(error));
+      .catch(error => reject(error));
   });
 
 module.exports = {

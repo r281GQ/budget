@@ -54,7 +54,7 @@ module.exports = app => {
 
   router.delete(`/:_id`, (request, response) => {
     handleDeleteGrouping(request)
-      .then(() => response.status(200).send({}))
+      .then((g) => response.status(200).send(g))
       .catch(error => {
         switch (error.message) {
           case ACCOUNT_BALANCE:

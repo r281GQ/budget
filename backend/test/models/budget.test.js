@@ -323,13 +323,13 @@ describe('Budget model', () => {
             sinon.stub(Date, 'now').returns(1506081561372)
             // console.log(moment().valueOf());
             const s = await budget.assignBudgetPeriod(moment());
-            console.log(s);
+            // console.log(s);
             const a = await s.assignBudgetPeriod(moment(1502496000000));
-            console.log(a);
+            // console.log(a);
             budget.budgetPeriods[0]._id = 0;
             budget.budgetPeriods[1]._id = 1;
             const budgetPeriods = await budget.balances();
-            console.log(budgetPeriods)
+            // console.log(budgetPeriods)
             const periods1 = budgetPeriods[1].monthlyBalance;
             const periods0 = budgetPeriods[0].monthlyBalance;
             expect(periods0).toBe(90)
@@ -358,13 +358,13 @@ describe('Budget model', () => {
             sinon.stub(Date, 'now').returns(1506081561372)
             // console.log(moment().valueOf());
             const s = await budget.assignBudgetPeriod(moment());
-            console.log(s);
+            // console.log(s);
             const a = await s.assignBudgetPeriod(moment(1502496000000));
-            console.log(a);
+            // console.log(a);
             budget.budgetPeriods[0]._id = 0;
             budget.budgetPeriods[1]._id = 1;
             const budgetPeriods = await budget.balances();
-            console.log(budgetPeriods)
+            // console.log(budgetPeriods)
             const periods1 = budgetPeriods[1].monthlyBalance;
             const periods0 = budgetPeriods[0].monthlyBalance;
             const periods1t = budgetPeriods[1].comulativeBalance;
