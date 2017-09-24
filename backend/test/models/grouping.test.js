@@ -153,6 +153,7 @@ describe('Grouping model', () => {
             expect(Transaction.aggregate.calledOnce).toBe(true)
         } catch (e) {}
     });
+    
     it('should invoke transaction.remove()', async() => {
         sinon.stub(Transaction, 'remove').resolves({});
 

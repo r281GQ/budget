@@ -28,6 +28,7 @@ module.exports = mongoose => {
     }
   });
 
+  //rewrite transaction query
   AccountSchema.methods.currentBalance = function() {
     const account = this;
     const Transaction = mongoose.model('Transaction');

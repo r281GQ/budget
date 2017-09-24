@@ -71,14 +71,16 @@ module.exports = mongoose => {
     let transaction = this;
     let Grouping = mongoose.model('Grouping');
 
-    Grouping.findOne({ _id: transaction.grouping, user: transaction.user })
+    return Grouping.findOne({ _id: transaction.grouping, user: transaction.user })
       .then(grouping => {
-        if (!grouping) return next(new Error(DEPENDENCIES_NOT_MET));
+        console.log('sdfsd')
+        if (!grouping)  throw new Error(DEPENDENCIES_NOT_MET);
         if (grouping.type === 'income' && transaction.budget)
           return next(new Error(BUDGET_INCOME_CONFLICT));
         return next();
       })
       .catch(error => {
+        console.log(error)
         next(error);
       });
   });
@@ -89,9 +91,9 @@ module.exports = mongoose => {
 
     if (!transaction.budget) next();
 
-    Budget.findOne({ _id: transaction.budget, user: transaction.user })
-      .then(grouping => {
-        if (!grouping) return next(new Error(RESOURCE_NOT_FOUND));
+    return Budget.findOne({ _id: transaction.budget, user: transaction.user })
+      .then(budget => {
+        if (!budget) return next(new Error(RESOURCE_NOT_FOUND));
         next();
       })
       .catch(error => {
