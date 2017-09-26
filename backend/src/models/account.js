@@ -1,5 +1,7 @@
 module.exports = mongoose => {
-  const { currencyValidator } = require('./../services/validators');
+  const {
+    currencyValidator
+  } = require('./../services/validators');
 
   const Schema = mongoose.Schema;
 
@@ -29,20 +31,22 @@ module.exports = mongoose => {
   });
 
   //rewrite transaction query
-  AccountSchema.methods.currentBalance = function() {
+  AccountSchema.methods.currentBalance = function () {
     const account = this;
     const Transaction = mongoose.model('Transaction');
     // const Grouping = mongoose.model('Grouping');
 
     return new Promise((resolve, reject) => {
-      Transaction.find({ account: account._id })
+      Transaction.find({
+          account: account._id
+        })
         .populate('grouping')
         .then(transactions => {
           const total = transactions.reduce(
             (sum, transaction) =>
-              transaction.grouping.type === 'income'
-                ? sum + transaction.amount
-                : sum - transaction.amount,
+            transaction.grouping.type === 'income' ?
+            sum + transaction.amount :
+            sum - transaction.amount,
             account.initialBalance
           );
           resolve(total);
@@ -51,9 +55,11 @@ module.exports = mongoose => {
     });
   };
 
-  AccountSchema.pre('remove', function(next) {
+  AccountSchema.pre('remove', function (next) {
     const Transaction = mongoose.model('Transaction');
-    Transaction.remove({ account: this._id })
+    Transaction.remove({
+        account: this._id
+      })
       .then(() => next())
       .catch(error => next(error));
   });

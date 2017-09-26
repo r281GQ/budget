@@ -1,7 +1,9 @@
 module.exports = mongoose => {
   const moment = require('moment');
 
-  const { currencyValidator } = require('./../services/validators');
+  const {
+    currencyValidator
+  } = require('./../services/validators');
   const {
     ID_INVALID_OR_NOT_PRESENT,
     FORBIDDEN_RESOURCE,
@@ -67,114 +69,133 @@ module.exports = mongoose => {
     }
   });
 
-  transactionSchema.pre('save', function(next) {
-    let transaction = this;
-    let Grouping = mongoose.model('Grouping');
+  transactionSchema.pre('save', async function (next) {
+    const transaction = this;
+    const Grouping = mongoose.model('Grouping');
 
-    return Grouping.findOne({ _id: transaction.grouping, user: transaction.user })
-      .then(grouping => {
-        console.log('sdfsd')
-        if (!grouping)  throw new Error(DEPENDENCIES_NOT_MET);
-        if (grouping.type === 'income' && transaction.budget)
-          return next(new Error(BUDGET_INCOME_CONFLICT));
-        return next();
+    try {
+      const grouping = await Grouping.findOne({
+        _id: transaction.grouping,
+        user: transaction.user
       })
-      .catch(error => {
-        console.log(error)
-        next(error);
-      });
+
+      if (!grouping) return next(new Error(DEPENDENCIES_NOT_MET));
+      if (grouping.type === 'income' && transaction.budget)
+        return next(new Error(BUDGET_INCOME_CONFLICT));
+      return next();
+    } catch (error) {
+      next(error);
+    }
   });
 
-  transactionSchema.pre('save', function(next) {
-    let transaction = this;
-    let Budget = mongoose.model('Budget');
-
-    if (!transaction.budget) next();
-
-    return Budget.findOne({ _id: transaction.budget, user: transaction.user })
-      .then(budget => {
-        if (!budget) return next(new Error(RESOURCE_NOT_FOUND));
-        next();
-      })
-      .catch(error => {
-        next(error);
-      });
-  });
-
-  transactionSchema.pre('save', function(next) {
-    let transaction = this;
-    let Account = mongoose.model('Account');
-    let Grouping = mongoose.model('Grouping');
-
-    Promise.all([
-      Account.findOne({ _id: transaction.account, user: transaction.user }),
-      Grouping.findOne({ _id: transaction.grouping, user: transaction.user })
-    ])
-      .then(items => {
-        if (!items[0]) return next(new Error(DEPENDENCIES_NOT_MET));
-        if (items[1].type === 'income') return next();
-        return items[0].currentBalance();
-      })
-      .then(currentBalance => {
-        if (currentBalance - transaction.amount < 0)
-          return next(new Error(ACCOUNT_BALANCE));
-        next();
-      })
-      .catch(error => {
-        next(error);
-      });
-  });
-
-  transactionSchema.pre('save', function(next) {
-    let transaction = this;
-    let Budget = mongoose.model('Budget');
+  transactionSchema.pre('save', async function (next) {
+    const transaction = this;
+    const Budget = mongoose.model('Budget');
 
     if (!transaction.budget) return next();
 
-    Budget.findOne({ _id: transaction.budget })
-      .then(budget => {
-        return budget.assignBudgetPeriod(transaction.date);
+    try {
+      const budget = await Budget.findOne({
+        _id: transaction.budget,
+        user: transaction.user
       })
-      .then(() => next())
-      .catch(error => next(error));
+      if (!budget) next(new Error(RESOURCE_NOT_FOUND));
+      else next();
+    } catch (errpr) {
+      next(error);
+    }
   });
 
-  transactionSchema.pre('remove', function(next) {
-    let transaction = this;
-    let Account = mongoose.model('Account');
-    let Grouping = mongoose.model('Grouping');
+  transactionSchema.pre('save', async function (next) {
+    const transaction = this;
+    const Account = mongoose.model('Account');
+    const Grouping = mongoose.model('Grouping');
 
-    Grouping.findOne({ _id: transaction.grouping })
-      .then(grouping => {
-        transaction.grouping = grouping;
-        return Account.findOne({ _id: transaction.account });
-      })
-      .then(account => {
-        if (transaction.grouping.type === 'expense') return next();
-        return account.currentBalance();
-      })
-      .then(currentBalance => {
-        if (currentBalance - transaction.amount < 0)
-          return next(new Error(ACCOUNT_BALANCE));
-        next();
-      })
-      .catch(error => {
-        next(error);
+    try {
+      const items = await Promise.all([
+        Account.findOne({
+          _id: transaction.account,
+          user: transaction.user
+        }),
+        Grouping.findOne({
+          _id: transaction.grouping,
+          user: transaction.user
+        })
+      ]);
+
+      if (!items[0]) return next(new Error(DEPENDENCIES_NOT_MET));
+      if (items[1].type === 'income') return next();
+
+      const currentBalance = await items[0].currentBalance();
+
+      if (currentBalance - transaction.amount < 0)
+        next(new Error(ACCOUNT_BALANCE));
+      else next();
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  transactionSchema.pre('save', async function (next) {
+    const transaction = this;
+    const Budget = mongoose.model('Budget');
+
+    if (!transaction.budget) return next();
+
+    try {
+      const budget = await Budget.findOne({
+        _id: transaction.budget
       });
+
+      await budget.assignBudgetPeriod(transaction.date);
+
+      next();
+    } catch (error) {
+      next(error);
+    }
   });
 
-  transactionSchema.statics.dates = function(user) {
-    return new Promise((resolve, reject) => {
-      this.find({ user })
-        .then(transactions =>
-          transactions.reduce((sum, transaction) => {
-            const currentDate = moment(transaction.date).format('MM-YYYY');
-            if (!sum[currentDate]) sum[currentDate] = currentDate;
-            return sum;
-          }, {})
-        )
-        .then(dates => resolve(dates));
-    });
+  transactionSchema.pre('remove', async function (next) {
+    const transaction = this;
+    const Account = mongoose.model('Account');
+    const Grouping = mongoose.model('Grouping');
+
+    try {
+      const grouping = await Grouping.findOne({
+        _id: transaction.grouping
+      });
+
+      transaction.grouping = grouping;
+
+      const account = await Account.findOne({
+        _id: transaction.account
+      });
+
+
+      if (transaction.grouping.type === 'expense') return next();
+      const currentBalance = await account.currentBalance();
+
+      if (currentBalance - transaction.amount < 0)
+        return next(new Error(ACCOUNT_BALANCE));
+      next();
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  transactionSchema.statics.dates = async function (user) {
+    try {
+      const dates = await this.find({
+        user
+      }).reduce((sum, transaction) => {
+        const currentDate = moment(transaction.date).format('MM-YYYY');
+        if (!sum[currentDate]) sum[currentDate] = currentDate;
+        return sum;
+      }, {});
+      return dates;
+    } catch (error) {
+      return (error)
+    }
   };
 
   mongoose.model('Transaction', transactionSchema);

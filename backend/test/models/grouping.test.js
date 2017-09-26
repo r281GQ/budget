@@ -163,6 +163,5 @@ describe('Grouping model', () => {
         });
         await groupingMockInstance.preRemoveHook2();
         expect(Transaction.remove.calledOnce).toBe(true)
-        console.log(groupingMockInstance.preRemoveHook2.toString())
     })
 });
