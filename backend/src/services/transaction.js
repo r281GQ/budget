@@ -82,7 +82,7 @@ const handleGetAllTransactions = request =>
 
 const handleGetDate = request => Transaction.dates(extractUser(request));
 
-const handlePutTransaction = (request, response) => {
+const handlePutTransaction = request => {
   return new Promise((resolve, reject) => {
     let user = extractUser(request);
     let {
@@ -148,7 +148,6 @@ const handlePutTransaction = (request, response) => {
         ]);
       })
       .then(balances => {
-        console.log(balances);
         let oldBalance = balances[1];
         let newBalance = balances[0];
 
@@ -352,7 +351,7 @@ const prepareDetailedAccount = (transactionToSend, user) =>
     )
   );
 
-const handlePostTransaction = (request, response) => {
+const handlePostTransaction = request => {
   return new Promise((resolve, reject) => {
     let user = extractUser(request);
     let {
@@ -415,8 +414,6 @@ const handlePostTransaction = (request, response) => {
         ]);
         transactionToSend = toSend;
         return prepareDetailedAccount(toSend, user);
-        // if (!toSend.budget) return resolve(toSend);
-        // return prepareDetailedBudget(toSend, user);
       })
       .then(
         transaction =>
@@ -453,7 +450,7 @@ const handlePostTransaction = (request, response) => {
   });
 };
 
-const handleDeleteTransaction = (request, response) =>
+const handleDeleteTransaction = request =>
   new Promise((resolve, reject) => {
     if (!idValidator(request.params['_id'])) return reject({
       error: ID_INVALID_OR_NOT_PRESENT
@@ -486,7 +483,7 @@ const handleDeleteTransaction = (request, response) =>
             'budget',
             'equity'
           ]),
-           extractUser(request)
+          extractUser(request)
         )
       )
       .then(
